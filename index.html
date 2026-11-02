@@ -1,0 +1,1259 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#224B3A">
+<meta name="robots" content="noindex, nofollow">
+<title>Control · Acreedores</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF0EA;--card:#FFFFFF;--line:#E0E4DB;--ink:#17261E;--muted:#5D6A61;
+  --green:#224B3A;--green2:#2F6A4F;--greenSoft:#E2ECE5;
+  --gold:#A47A25;--goldSoft:#F6EEDC;--red:#B42B22;--redDark:#7C1F1A;--redSoft:#F9E5E2;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Roboto,"Segoe UI",sans-serif;font-size:16px;line-height:1.4}
+body{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+body.sin-nav{padding-bottom:24px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+#app{max-width:560px;margin:0 auto;padding:12px 18px 24px}
+h2,h3{margin:0}
+.muted{color:var(--muted)}
+.chico{font-size:14px}
+.rojo{color:var(--red)}
+/* encabezado */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 18px}
+.marca{display:flex;align-items:center;gap:12px;min-width:0}
+.marca .logo{width:46px;height:46px;flex:none}
+.marca h1{margin:0;font-size:30px;font-weight:800;color:var(--green);letter-spacing:-.02em;line-height:1.05}
+.marca p{margin:3px 0 0;color:var(--muted);font-size:14px}
+.acc{display:flex;gap:7px;flex:none}
+.redondo{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;padding:0}
+.pill-al{height:44px;padding:0 14px;border-radius:22px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;gap:8px;font-weight:600}
+.pill-al i{width:9px;height:9px;border-radius:50%;background:var(--red);display:block}
+.pill-al.cero i{background:var(--green2)}
+.volver{display:flex;align-items:center;gap:6px;background:none;border:0;padding:8px 0;color:var(--green);font-weight:600;font-size:16px}
+/* títulos */
+.tit{font-size:26px;font-weight:700;margin:6px 0 16px;letter-spacing:-.01em}
+.sec-tit{display:flex;justify-content:space-between;align-items:center;margin:26px 0 12px;gap:10px}
+.sec-tit h2{font-size:20px;font-weight:700}
+.sub{color:var(--muted);font-size:16px;margin:26px 0 12px}
+.link{background:none;border:0;color:var(--green);font-weight:600;padding:6px 0}
+.grupo{font-weight:600;font-size:16px;margin:22px 0 10px}
+.grupo.mora{color:var(--red)}.grupo.hoy{color:var(--green)}.grupo.prox{color:var(--gold)}
+/* tarjetas */
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:20px 18px;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tarjeta{border-radius:24px;padding:18px 16px;min-height:148px;display:flex;flex-direction:column;gap:4px;border:1px solid transparent;text-align:left}
+.tarjeta .ico{margin-bottom:auto;padding-bottom:12px}
+.tarjeta .lbl{font-size:14.5px;opacity:.93;line-height:1.3}
+.tarjeta .valor{font-size:clamp(19px,6vw,27px);font-weight:800;letter-spacing:-.02em;word-break:break-word}
+.tarjeta .extra{font-size:13px;opacity:.85}
+.tarjeta.verde{background:var(--green);color:#fff}
+.tarjeta.dorada{background:var(--gold);color:#fff}
+.tarjeta.roja{background:var(--red);color:#fff}
+.tarjeta.blanca{background:#fff;border-color:var(--line)}
+.tarjeta.blanca .valor{color:var(--gold)}
+.tarjeta.blanca.num .valor{color:var(--ink)}
+.tarjeta.chica{min-height:118px}
+/* alertas */
+.alerta{width:100%;display:flex;align-items:center;gap:14px;background:#F4F5F1;border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin-bottom:10px;text-align:left}
+.alerta .punto{width:12px;height:12px;border-radius:50%;flex:none}
+.alerta .al-txt{flex:1;min-width:0}
+.alerta .al-txt b{display:block;font-weight:500;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alerta .al-txt small{color:var(--muted);font-size:14.5px}
+.alerta .al-est{font-size:15px;font-weight:500;text-align:right;flex:none;max-width:42%}
+.alerta.mora .punto{background:var(--red)}.alerta.mora .al-est{color:var(--red)}
+.alerta.mora2 .punto{background:var(--redDark)}.alerta.mora2 .al-est{color:var(--redDark);font-weight:700}
+.alerta.hoy{background:var(--greenSoft);border-color:#BFD5C6}.alerta.hoy .punto{background:var(--green)}.alerta.hoy .al-est{color:var(--green);font-weight:700}
+.alerta.prox .punto{background:var(--gold)}.alerta.prox .al-est{color:var(--gold)}
+.vacio{display:flex;gap:10px;align-items:center;background:#fff;border:1px dashed var(--line);border-radius:20px;padding:18px;color:var(--muted)}
+/* cobro / pago card */
+.cobro{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:12px}
+.cobro .c-top{display:flex;justify-content:space-between;gap:10px}
+.cobro .c-top b{font-weight:500;font-size:18px}
+.cobro .c-est{font-weight:500;text-align:right;flex:none}
+.cobro .c-sub{color:var(--muted);margin-top:4px}
+.cobro .c-bot{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:14px}
+.cobro .c-bot small{color:var(--muted);display:block}
+.cobro .btn{white-space:nowrap;flex:none}
+.cobro .c-monto{color:var(--gold);font-weight:800;font-size:24px}
+.mora-t{color:var(--red)}.mora2-t{color:var(--redDark);font-weight:700}.hoy-t{color:var(--green);font-weight:700}.prox-t{color:var(--gold)}
+/* botones */
+.btn{border:0;border-radius:999px;padding:13px 22px;font-weight:600;font-size:16px;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.grande{width:100%;padding:16px 22px;font-size:17px;margin-top:6px}
+.btn.sec{background:#fff;color:var(--green);border:1.5px solid var(--line)}
+.btn.oro{background:var(--gold)}
+.btn.peligro{background:var(--red)}
+.btn.chico{padding:9px 16px;font-size:14.5px}
+.btn:disabled{opacity:.5}
+.fila-btn{display:flex;gap:10px;margin-top:14px}
+.fila-btn .btn{flex:1}
+.acciones-ficha{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px}
+.acciones-ficha .btn{width:100%;padding:14px 10px}
+.chips{display:flex;gap:8px;margin:0 0 14px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font-weight:500;font-size:14.5px}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+/* lista acreedores */
+.acr{width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:12px;display:block}
+.acr .a1{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.acr .a1 b{font-size:18px;font-weight:600}
+.acr .a2{display:flex;justify-content:space-between;gap:10px;margin-top:10px;align-items:flex-end}
+.acr .deuda{font-size:22px;font-weight:800;color:var(--green)}
+.acr small{color:var(--muted);font-size:14px}
+.pill{display:inline-block;border-radius:999px;padding:4px 11px;font-size:13px;font-weight:600;white-space:nowrap;flex:none}
+.pill.ok{background:var(--greenSoft);color:var(--green)}
+.pill.mora{background:var(--redSoft);color:var(--red)}
+.pill.mora2{background:var(--redDark);color:#fff}
+.pill.hoy{background:var(--green);color:#fff}
+.pill.prox{background:var(--goldSoft);color:var(--gold)}
+.pill.parcial{background:var(--goldSoft);color:var(--gold)}
+.pill.gris{background:#ECEEE9;color:var(--muted)}
+.pill.liq{background:#E6E3F3;color:#4A3F86}
+/* ficha */
+.resumen{background:var(--green);color:#fff;border-radius:26px;padding:22px 20px;margin-bottom:12px}
+.resumen .r-nom{font-size:22px;font-weight:700;margin:0 0 2px;word-break:break-word}
+.resumen .r-lbl{opacity:.85;font-size:14px;margin-top:14px}
+.resumen .r-big{font-size:34px;font-weight:800;letter-spacing:-.02em}
+.resumen .r-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18)}
+.resumen .r-grid small{display:block;opacity:.78;font-size:13px}
+.resumen .r-grid b{font-size:17px;font-weight:700}
+.obs{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px;white-space:pre-wrap}
+.aviso{border-radius:18px;padding:14px 16px;margin:0 0 12px;font-size:15px}
+.aviso.err{background:var(--redSoft);color:var(--redDark);border:1px solid #EBC3BE}
+.aviso.info{background:var(--goldSoft);color:#6E5114;border:1px solid #EAD9B3}
+.aviso.ok{background:var(--greenSoft);color:var(--green);border:1px solid #C5D9CB}
+.aviso b{display:block;margin-bottom:4px}
+.aviso ul{margin:6px 0 0;padding-left:18px}
+.per{display:flex;gap:12px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:10px}
+.per.mora{border-left:5px solid var(--red)}
+.per.pagado{border-left:5px solid var(--green2)}
+.per.parcial{border-left:5px solid var(--gold)}
+.per .chk{width:24px;height:24px;margin-top:2px;accent-color:var(--green);flex:none}
+.per-cuerpo{flex:1;min-width:0}
+.per-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.per-top b{font-size:17px}
+.per-l{color:var(--muted);font-size:14.5px;margin-top:2px}
+.per-l b{color:var(--ink)}
+.per-nota{margin-top:8px;background:#F4F5F1;border-radius:12px;padding:8px 12px;font-size:14px;white-space:pre-wrap}
+.per-acc{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.mov{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px}
+.mov .m1{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.mov .m1 b{font-weight:600}
+.mov .m-tot{font-weight:800;color:var(--green);white-space:nowrap}
+.mov .m-l{color:var(--muted);font-size:14px;margin-top:3px}
+.mov.anulado{opacity:.6}
+.mov.anulado .m1 b,.mov.anulado .m-tot{text-decoration:line-through}
+.mov .m-acc{margin-top:10px}
+details.plegable{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px}
+details.plegable summary{font-weight:600;cursor:pointer}
+.barra-sel{position:fixed;left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom));padding:10px 18px;z-index:25;display:flex;justify-content:center}
+.barra-sel .btn{width:100%;max-width:524px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+/* formularios */
+.form label{display:block;font-size:14.5px;color:var(--muted);margin-bottom:14px;font-weight:500}
+.form input,.form select,.form textarea{display:block;width:100%;margin-top:6px;border:1.5px solid var(--line);background:#FAFBF8;border-radius:14px;padding:13px 14px;font-size:17px;color:var(--ink);outline:none;min-height:50px}
+.form input:focus,.form select:focus,.form textarea:focus{border-color:var(--green2);background:#fff}
+.form textarea{min-height:90px;resize:vertical}
+.form .dos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form h3{font-size:20px;margin-bottom:6px}
+.form .ayuda{font-size:13.5px;color:var(--muted);margin-top:5px;font-weight:400}
+.tasa-fila{display:flex;align-items:center;gap:12px;margin-top:6px}
+.tasa-fila input[type=range]{flex:1;accent-color:var(--green);min-height:auto;padding:0;border:0;background:none;margin:0}
+.tasa-fila input[type=number]{width:96px;margin:0;text-align:center;font-weight:700}
+.prev{background:#F4F5F1;border-radius:16px;padding:14px 16px;margin:4px 0 14px;font-size:15px}
+.prev:empty{display:none}
+.prev .p-tot{font-size:20px;font-weight:800;color:var(--green)}
+.prev ul{margin:6px 0;padding-left:18px}
+.prev .err{color:var(--red);font-weight:600}
+.prev .adv{color:#8A5B00}
+.liq-tabla{width:100%;border-collapse:collapse;font-size:15px;margin:8px 0}
+.liq-tabla td{padding:7px 0;border-bottom:1px solid var(--line)}
+.liq-tabla td:last-child{text-align:right;font-weight:600}
+.liq-tabla tr.total td{border-bottom:0;font-size:19px;font-weight:800;color:var(--green);padding-top:12px}
+/* gráfico */
+.dona-wrap{display:flex;align-items:center;gap:18px}
+.dona-wrap svg{flex:none}
+.leyenda div{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:15px}
+.leyenda i{width:11px;height:11px;border-radius:50%;display:block;flex:none}
+.leyenda b{margin-left:auto;padding-left:8px}
+.prox-fila{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left}
+.prox-fila:last-child{border-bottom:0}
+.prox-fila small{display:block;color:var(--muted);font-size:14px}
+.prox-fila .pm{font-weight:700;color:var(--gold);white-space:nowrap}
+.mes{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px}
+.mes .mes-t{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.mes .mes-t b{text-transform:capitalize;font-size:17px}
+.mes .mes-d{font-weight:800;color:var(--green)}
+.mes .mes-g{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-top:8px;font-size:14px;color:var(--muted)}
+.mes .mes-g span b{color:var(--ink);font-weight:600}
+.barras{width:100%;height:auto;display:block}
+.ajuste{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.ajuste:last-child{border-bottom:0}
+.ajuste small{display:block;color:var(--muted);font-size:13.5px}
+/* bloqueo */
+.bloqueo{min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:20px}
+.bloqueo .logo{width:92px;height:92px}
+.bloqueo h1{font-size:36px;color:var(--green);margin:12px 0 0;font-weight:800;letter-spacing:-.02em}
+.bloqueo .form{width:100%;max-width:400px;text-align:left;margin-top:24px}
+.bloqueo .btn.sec{margin-top:10px}
+/* navegación inferior */
+nav.abajo{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px calc(10px + env(safe-area-inset-bottom));z-index:20}
+nav.abajo:empty{display:none}
+nav.abajo button{flex:1;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted);font-weight:500;font-size:12.5px;position:relative;padding:4px 0;min-width:0}
+nav.abajo button.on{color:var(--green);font-weight:700}
+nav.abajo .badge{position:absolute;top:-6px;left:calc(50% + 2px);background:var(--red);color:#fff;border-radius:11px;min-width:22px;height:22px;font-size:12.5px;display:grid;place-items:center;padding:0 6px;font-weight:600}
+/* hoja inferior */
+#hoja{position:fixed;inset:0;z-index:50;display:none}
+#hoja.on{display:block}
+.hoja-fondo{position:absolute;inset:0;background:rgba(15,25,20,.45)}
+.hoja{position:absolute;left:0;right:0;bottom:0;max-height:92vh;overflow:auto;background:#fff;border-radius:26px 26px 0 0;padding:12px 20px calc(24px + env(safe-area-inset-bottom));max-width:600px;margin:0 auto}
+.hoja .asa{width:44px;height:5px;border-radius:3px;background:#D6DAD2;margin:0 auto 14px}
+.hoja h3{font-size:21px;margin-bottom:8px}
+.hoja p{color:var(--muted);margin:0 0 14px}
+.hoja .form{padding:0;border:0;margin:0}
+#toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;font-size:15px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (max-width:370px){#app{padding:10px 14px}.marca h1{font-size:26px}.redondo{width:40px;height:40px}.pill-al{height:40px;padding:0 11px}}
+</style>
+</head>
+<body>
+<div id="app"><div class="bloqueo"><p class="muted">Cargando…</p></div></div>
+<nav id="nav" class="abajo"></nav>
+<div id="hoja"></div>
+<div id="toast"></div>
+
+<!-- ===================== MOTOR DE CÁLCULO ===================== -->
+<script id="motor">
+/* Todos los montos se manejan en CENTAVOS (números enteros) para evitar errores de redondeo.
+   Las fechas son textos AAAA-MM-DD. */
+var Motor = (function () {
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var parse = function (s) { return s.split('-').map(Number); };
+  var dim = function (y, m) { return new Date(Date.UTC(y, m, 0)).getUTCDate(); };
+  var num = function (s) { var p = parse(s); return Math.round(Date.UTC(p[0], p[1] - 1, p[2]) / 864e5); };
+  var diff = function (a, b) { return num(a) - num(b); };
+  var iso = function (y, m, d) { return y + '-' + pad(m) + '-' + pad(d); };
+  var suma = function (arr, f) { return arr.reduce(function (s, x) { return s + (typeof f === 'string' ? (x[f] || 0) : f(x)); }, 0); };
+
+  function fmt(c) {
+    var neg = c < 0; c = Math.abs(Math.round(c));
+    var e = Math.floor(c / 100), d = c % 100;
+    return (neg ? '-' : '') + '$' + String(e).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + pad(d);
+  }
+  function fmtTasa(t) { return String(t).replace('.', ',') + '%'; }
+
+  /* Fecha de vencimiento del mes k (k = 1, 2, 3…). Mismo "día de pago" cada mes;
+     si el mes no tiene ese día (ej. 31 en febrero) se usa el último día del mes. */
+  function vencimiento(fechaRec, diaPago, k) {
+    var p = parse(fechaRec), t = p[1] - 1 + k;
+    var y = p[0] + Math.floor(t / 12), m = (t % 12) + 1;
+    return iso(y, m, Math.min(diaPago, dim(y, m)));
+  }
+  function inicioPeriodo(a, k) { return k === 1 ? a.fechaRecepcion : vencimiento(a.fechaRecepcion, a.diaPago, k - 1); }
+  function ordenar(x, y) { return x.fecha < y.fecha ? -1 : x.fecha > y.fecha ? 1 : (x.creado || 0) - (y.creado || 0); }
+
+  /* Cálculo completo de un acreedor a partir de sus movimientos (nunca se guardan "meses"). */
+  function calcular(a, movsAll, hoy) {
+    var movs = movsAll.filter(function (m) { return m.acreedorId === a.id; });
+    var validos = movs.filter(function (m) { return !m.anulado; });
+    var pagos = validos.filter(function (m) { return m.tipo === 'pago'; });
+    var tasas = validos.filter(function (m) { return m.tipo === 'tasa'; }).sort(ordenar);
+    var abonos = pagos.filter(function (p) { return p.capital > 0; });
+
+    var capitalEn = function (f) { return a.capital - suma(abonos.filter(function (p) { return p.fecha <= f; }), 'capital'); };
+    var tasaEn = function (f) { var t = a.tasa; tasas.forEach(function (x) { if (x.fecha <= f) t = x.tasa; }); return t; };
+
+    var asig = {}, fechaPago = {};
+    pagos.forEach(function (p) {
+      (p.asignaciones || []).forEach(function (s) {
+        asig[s.periodo] = (asig[s.periodo] || 0) + s.monto;
+        if (!fechaPago[s.periodo] || p.fecha > fechaPago[s.periodo]) fechaPago[s.periodo] = p.fecha;
+      });
+    });
+    var maxAsig = Math.max.apply(null, [0].concat(Object.keys(asig).map(Number)));
+
+    var periodos = [];
+    for (var k = 1; k <= 1200; k++) {
+      var inicio = inicioPeriodo(a, k);
+      if (inicio > hoy && k > maxAsig) break;          // solo hasta el mes en curso
+      var cap = capitalEn(inicio);                         // capital vigente al INICIO del mes
+      if (cap <= 0) break;                                 // deuda saldada: no hay más meses
+      var vence = vencimiento(a.fechaRecepcion, a.diaPago, k);
+      var tasa = tasaEn(inicio);
+      var interes = Math.round(cap * tasa / 100);
+      var pagado = asig[k] || 0;
+      var saldo = interes - pagado;
+      var estado = pagado >= interes ? 'pagado' : pagado > 0 ? 'parcial' : 'pendiente';
+      var dv = diff(vence, hoy), alerta = null, diasMora = 0;
+      if (saldo > 0) {
+        if (dv < 0) { alerta = 'mora'; diasMora = -dv; }
+        else if (dv === 0) alerta = 'hoy';
+        else if (dv <= 3) alerta = 'proximo';
+        else alerta = 'encurso';
+      }
+      var fp = fechaPago[k] || null;
+      var diasRetraso = (estado === 'pagado' && fp) ? Math.max(0, diff(fp, vence)) : null;
+      periodos.push({ n: k, inicio: inicio, vence: vence, capital: cap, tasa: tasa, interes: interes, pagado: pagado,
+        saldo: saldo, estado: estado, alerta: alerta, diasMora: diasMora, fechaPago: fp, diasRetraso: diasRetraso,
+        nota: (a.notas || {})[k] || '' });
+    }
+
+    var capitalPendiente = capitalEn('9999-12-31');
+    var pos = function (x) { return Math.max(0, x); };
+    var interesVencido = suma(periodos.filter(function (p) { return p.vence <= hoy; }), function (p) { return pos(p.saldo); });
+    var interesPorLiquidar = suma(periodos.filter(function (p) { return p.inicio <= hoy; }), function (p) { return pos(p.saldo); });
+
+    var inc = [];
+    if (capitalPendiente < 0) inc.push('Los abonos a capital superan el capital prestado por ' + fmt(-capitalPendiente) + '.');
+    periodos.forEach(function (p) { if (p.saldo < 0) inc.push('Mes ' + p.n + ': se registró ' + fmt(-p.saldo) + ' más de lo que corresponde (' + fmt(p.interes) + ').'); });
+    Object.keys(asig).map(Number).forEach(function (n) {
+      if (n > periodos.length) inc.push('Hay ' + fmt(asig[n]) + ' de interés asignado al Mes ' + n + ', pero ese mes ya no existe porque el capital estaba saldado antes.');
+    });
+    validos.forEach(function (m) {
+      if (m.fecha < a.fechaRecepcion) inc.push('Hay un movimiento del ' + m.fecha + ' anterior a la fecha en que recibiste el préstamo.');
+      if (m.fecha > hoy) inc.push('Hay un movimiento con fecha futura (' + m.fecha + ').');
+    });
+
+    var cancelado = capitalPendiente <= 0 && periodos.every(function (p) { return p.saldo <= 0; }) && periodos.length + pagos.length > 0;
+    var siguiente = periodos.find(function (p) { return p.saldo > 0; }) || null;
+    var proyeccion = null;
+    if (!siguiente && capitalPendiente > 0) {
+      var kn = periodos.length + 1, ini = inicioPeriodo(a, kn);
+      proyeccion = { n: kn, inicio: ini, vence: vencimiento(a.fechaRecepcion, a.diaPago, kn),
+        interes: Math.round(capitalPendiente * tasaEn(ini) / 100), saldo: Math.round(capitalPendiente * tasaEn(ini) / 100), proyectado: true };
+    }
+    var ultimoPago = pagos.slice().sort(ordenar).pop();
+    return {
+      periodos: periodos, capitalPendiente: capitalPendiente, interesVencido: interesVencido, interesPorLiquidar: interesPorLiquidar,
+      interesPagado: suma(pagos, 'interes'), capitalAbonado: suma(pagos, 'capital'),
+      tasaActual: tasaEn(hoy), interesMensualActual: Math.round(Math.max(0, capitalPendiente) * tasaEn(hoy) / 100),
+      inconsistencias: inc, cancelado: cancelado, fechaCancelacion: cancelado && ultimoPago ? ultimoPago.fecha : null,
+      siguiente: siguiente || proyeccion,
+      enMora: periodos.filter(function (p) { return p.alerta === 'mora'; })
+    };
+  }
+
+  /* Reparte un pago de interés entre los meses pendientes, del más antiguo al más nuevo.
+     Si se elige un mes, se llena ese primero. */
+  function asignar(periodos, monto, preferido) {
+    var out = [], resto = monto;
+    var orden = periodos.filter(function (p) { return p.saldo > 0; });
+    if (preferido) { var i = orden.findIndex(function (p) { return p.n === preferido; }); if (i > 0) orden.unshift(orden.splice(i, 1)[0]); }
+    for (var j = 0; j < orden.length && resto > 0; j++) {
+      var m = Math.min(resto, orden[j].saldo);
+      out.push({ periodo: orden[j].n, monto: m }); resto -= m;
+    }
+    out.sort(function (x, y) { return x.periodo - y.periodo; });
+    return { asignaciones: out, sobrante: resto };
+  }
+
+  function prepararPago(a, movs, d, hoy) {
+    var interes = d.interes || 0, capital = d.capital || 0;
+    if (!(interes > 0) && !(capital > 0)) return { error: 'Ingresa el interés pagado, el abono a capital o ambos.' };
+    if (!d.fecha) return { error: 'Indica la fecha del pago.' };
+    if (d.fecha > hoy) return { error: 'La fecha del pago no puede ser futura.' };
+    if (d.fecha < a.fechaRecepcion) return { error: 'La fecha es anterior a la fecha en que recibiste el préstamo.' };
+    var r0 = calcular(a, movs, hoy);
+    if (capital > r0.capitalPendiente) return { error: 'El abono a capital (' + fmt(capital) + ') supera el capital pendiente (' + fmt(Math.max(0, r0.capitalPendiente)) + ').' };
+    var pago = { tipo: 'pago', acreedorId: a.id, fecha: d.fecha, interes: interes, capital: capital, asignaciones: [], obs: d.obs || '' };
+    var r1 = calcular(a, movs.concat([pago]), hoy);
+    var res = asignar(r1.periodos, interes, d.periodo || null);
+    if (res.sobrante > 0) return { error: 'El interés ingresado supera en ' + fmt(res.sobrante) + ' lo que se debe hasta el mes en curso.' };
+    pago.asignaciones = res.asignaciones;
+    var r2 = calcular(a, movs.concat([pago]), hoy);
+    var nuevas = r2.inconsistencias.filter(function (x) { return r0.inconsistencias.indexOf(x) < 0; });
+    return { pago: pago, r0: r0, r2: r2, nuevasInconsistencias: nuevas };
+  }
+
+  /* Liquidación: capital pendiente + todos los intereses pendientes, incluido el mes en curso COMPLETO. */
+  function liquidacion(a, movs, fecha, hoy) {
+    if (!fecha) return { error: 'Indica la fecha de la liquidación.' };
+    if (fecha > hoy) return { error: 'La fecha no puede ser futura.' };
+    if (fecha < a.fechaRecepcion) return { error: 'La fecha es anterior a la fecha en que recibiste el préstamo.' };
+    var post = movs.filter(function (m) { return m.acreedorId === a.id && !m.anulado && m.tipo === 'pago' && m.fecha > fecha; });
+    if (post.length) return { error: 'Hay pagos registrados después de esa fecha. Usa una fecha igual o posterior al último pago.' };
+    var r0 = calcular(a, movs, hoy), cap = Math.max(0, r0.capitalPendiente);
+    var pago = { tipo: 'pago', acreedorId: a.id, fecha: fecha, interes: 0, capital: cap, asignaciones: [], obs: '', liquidacion: true };
+    var r1 = calcular(a, movs.concat([pago]), hoy);
+    var det = r1.periodos.filter(function (p) { return p.saldo > 0; });
+    pago.asignaciones = det.map(function (p) { return { periodo: p.n, monto: p.saldo }; });
+    pago.interes = suma(det, 'saldo');
+    if (!cap && !pago.interes) return { error: 'Esta deuda no tiene saldo pendiente.' };
+    return { pago: pago, capital: cap, detalle: det, interes: pago.interes, total: cap + pago.interes };
+  }
+
+  function evolucionMensual(acreedores, movs, hoy) {
+    if (!acreedores.length) return [];
+    var ids = {}; acreedores.forEach(function (a) { ids[a.id] = 1; });
+    var calcs = acreedores.map(function (a) { return { a: a, r: calcular(a, movs, hoy) }; });
+    var pagos = movs.filter(function (m) { return m.tipo === 'pago' && !m.anulado && ids[m.acreedorId]; });
+    var p0 = parse(acreedores.map(function (a) { return a.fechaRecepcion; }).sort()[0]), ph = parse(hoy);
+    var y = p0[0], m = p0[1], out = [];
+    while (y < ph[0] || (y === ph[0] && m <= ph[1])) {
+      var clave = y + '-' + pad(m), fin = (y === ph[0] && m === ph[1]) ? hoy : iso(y, m, dim(y, m));
+      var deuda = 0, recibido = 0, generado = 0;
+      calcs.forEach(function (c) {
+        if (c.a.fechaRecepcion <= fin) deuda += c.a.capital - suma(pagos.filter(function (p) { return p.acreedorId === c.a.id && p.fecha <= fin; }), 'capital');
+        if (c.a.fechaRecepcion.indexOf(clave) === 0) recibido += c.a.capital;
+        c.r.periodos.forEach(function (p) { if (p.vence.indexOf(clave) === 0) generado += p.interes; });
+      });
+      var pm = pagos.filter(function (p) { return p.fecha.indexOf(clave) === 0; });
+      out.push({ mes: clave, deuda: deuda, recibido: recibido, generado: generado, interesPagado: suma(pm, 'interes'), capitalAbonado: suma(pm, 'capital') });
+      m++; if (m > 12) { m = 1; y++; }
+    }
+    return out;
+  }
+
+  return { pad: pad, diff: diff, dim: dim, fmt: fmt, fmtTasa: fmtTasa, vencimiento: vencimiento, inicioPeriodo: inicioPeriodo,
+    calcular: calcular, asignar: asignar, prepararPago: prepararPago, liquidacion: liquidacion, evolucionMensual: evolucionMensual, suma: suma };
+})();
+if (typeof module !== 'undefined') module.exports = Motor;
+</script>
+
+<!-- ===================== APLICACIÓN ===================== -->
+<script>
+'use strict';
+const VERSION = '1.0.0';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+const { fmt, fmtTasa, pad } = Motor;
+function hoy() { if (window.__HOY) return window.__HOY; const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const MESES_L = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const fmtF = s => { const [y, m, d] = s.split('-').map(Number); return `${d} ${MESES[m - 1]} ${y}`; };
+const fmtFc = s => { const [, m, d] = s.split('-').map(Number); return `${d} ${MESES[m - 1]}`; };
+const fmtMes = s => { const [y, m] = s.split('-').map(Number); return `${MESES_L[m - 1]} ${y}`; };
+const plural = (n, a, b) => `${n} ${n === 1 ? a : b}`;
+function leerMonto(v) {
+  v = String(v || '').trim().replace(/[$\s]/g, '');
+  if (!v) return 0;
+  if (v.includes(',')) v = v.replace(/\./g, '').replace(',', '.');
+  else if (/^\d{1,3}(\.\d{3})+$/.test(v)) v = v.replace(/\./g, '');
+  const n = Number(v);
+  if (!isFinite(n) || n < 0) return NaN;
+  return Math.round(Number((n * 100).toFixed(4)));
+}
+const montoInput = c => c ? (c / 100).toFixed(2).replace('.', ',') : '';
+
+/* ---------- íconos ---------- */
+const ic = (p, s = 22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const I = {
+  home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.8c1.9.7 3.1 2.5 3.5 5.2"/>',
+  cal: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/><circle cx="15.5" cy="15.5" r="2.6"/><path d="M15.5 14.4v1.2l.8.6"/>',
+  zap: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+  hist: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3.5 2"/>',
+  lock: '<rect x="4.5" y="10.5" width="15" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>',
+  ajustes: '<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  wallet: '<path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4h-12A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/><path d="M21 9h-5a3 3 0 0 0 0 6h5z"/>',
+  trend: '<path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  alert: '<path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  checkc: '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  back: '<path d="M15 18 9 12l6-6"/>',
+  fp: '<path d="M7 11a5 5 0 0 1 10 0c0 3-.5 5.5-1.5 8"/><path d="M12 11c0 3.5-.6 6.5-2 9"/><path d="M4.5 15.5c.4-1.4.5-2.9.5-4.5a7 7 0 0 1 12-4.9"/><path d="M19 9.5c.3.9.5 2 .5 3 0 1.5-.1 2.8-.4 4"/><path d="M8.5 19.5c.6-1.2 1-2.6 1.2-4"/>',
+  down: '<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 21h16"/>',
+  up: '<path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 21h16"/>',
+  coins: '<circle cx="9" cy="9" r="6"/><path d="M15.5 9.3A6 6 0 1 1 9.3 15.5"/>',
+  percent: '<path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+  share: '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"/>'
+};
+const LOGO = `<svg class="logo" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" fill="none" stroke="#2F6A4F" stroke-width="7"/><path d="M60 6a54 54 0 0 1 54 54" fill="none" stroke="#D2A33A" stroke-width="7" stroke-linecap="round"/><circle cx="60" cy="60" r="38" fill="#224B3A"/><circle cx="60" cy="56" r="21" fill="#E2B64A"/><circle cx="60" cy="56" r="16.5" fill="none" stroke="#B88A2A" stroke-width="2"/><text x="60" y="64" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="24" fill="#224B3A">$</text><path d="M38 84h44" stroke="#E2B64A" stroke-width="5" stroke-linecap="round"/><path d="m72 77 10 7-10 7" fill="none" stroke="#E2B64A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+/* ---------- estado ---------- */
+const S = { listo: false, desbloqueado: false, aj: {}, acreedores: [], movs: [], vista: 'inicio', fichaId: null, filtroAcr: 'activos',
+  histTab: 'pagos', histAcr: '', histTipo: '', bulk: false, sel: new Set(), pre: null, ultimaAct: Date.now(), intentos: 0, bloqueoHasta: 0 };
+let CV = 0, cache = { v: -1 };
+
+/* ---------- base de datos local (IndexedDB) ---------- */
+const DB = {
+  db: null,
+  abrir() {
+    return new Promise((ok, mal) => {
+      const r = indexedDB.open('control-acreedores-db', 1);
+      r.onupgradeneeded = () => {
+        const d = r.result;
+        d.createObjectStore('acreedores', { keyPath: 'id' });
+        d.createObjectStore('movimientos', { keyPath: 'id' });
+        d.createObjectStore('ajustes', { keyPath: 'clave' });
+        d.createObjectStore('respaldos', { keyPath: 'id' });
+      };
+      r.onsuccess = () => { DB.db = r.result; ok(); };
+      r.onerror = () => mal(r.error);
+    });
+  },
+  all(store) {
+    return new Promise((ok, mal) => { const r = DB.db.transaction(store).objectStore(store).getAll(); r.onsuccess = () => ok(r.result); r.onerror = () => mal(r.error); });
+  },
+  put(store, ...objs) {
+    return new Promise((ok, mal) => {
+      const t = DB.db.transaction(store, 'readwrite'); const s = t.objectStore(store);
+      objs.forEach(o => s.put(o)); t.oncomplete = () => ok(); t.onerror = () => mal(t.error); t.onabort = () => mal(t.error);
+    });
+  },
+  borrar(store, ...keys) {
+    return new Promise((ok, mal) => {
+      const t = DB.db.transaction(store, 'readwrite'); const s = t.objectStore(store);
+      keys.forEach(k => s.delete(k)); t.oncomplete = () => ok(); t.onerror = () => mal(t.error);
+    });
+  },
+  reemplazar(acreedores, movs, ajustesExtra) {
+    return new Promise((ok, mal) => {
+      const t = DB.db.transaction(['acreedores', 'movimientos', 'ajustes'], 'readwrite');
+      const a = t.objectStore('acreedores'), m = t.objectStore('movimientos'), j = t.objectStore('ajustes');
+      a.clear(); m.clear();
+      acreedores.forEach(x => a.put(x)); movs.forEach(x => m.put(x));
+      Object.entries(ajustesExtra || {}).forEach(([clave, valor]) => j.put({ clave, valor }));
+      t.oncomplete = () => ok(); t.onerror = () => mal(t.error); t.onabort = () => mal(t.error);
+    });
+  }
+};
+async function setAj(clave, valor) { await DB.put('ajustes', { clave, valor }); S.aj[clave] = valor; }
+async function delAj(clave) { await DB.borrar('ajustes', clave); delete S.aj[clave]; }
+async function guardarAcr(a) { await DB.put('acreedores', a); const i = S.acreedores.findIndex(x => x.id === a.id); i >= 0 ? S.acreedores[i] = a : S.acreedores.push(a); CV++; }
+async function guardarMov(...ms) { await DB.put('movimientos', ...ms); ms.forEach(m => { const i = S.movs.findIndex(x => x.id === m.id); i >= 0 ? S.movs[i] = m : S.movs.push(m); }); CV++; }
+async function cargarDatos() { S.acreedores = await DB.all('acreedores'); S.movs = await DB.all('movimientos'); CV++; }
+
+/* ---------- seguridad ---------- */
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function hashClave(p, salt, iter) {
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(p), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: unb64(salt), iterations: iter }, key, 256);
+  return b64(bits);
+}
+async function crearClave(p) { const salt = b64(crypto.getRandomValues(new Uint8Array(16))); const iter = 210000; await setAj('pass', { salt, iter, hash: await hashClave(p, salt, iter) }); }
+async function verificarClave(p) { const c = S.aj.pass; return c && (await hashClave(p, c.salt, c.iter)) === c.hash; }
+async function huellaDisponible() { try { return !!(window.PublicKeyCredential && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()); } catch { return false; } }
+async function activarHuella() {
+  try {
+    const cred = await navigator.credentials.create({ publicKey: {
+      challenge: crypto.getRandomValues(new Uint8Array(32)), rp: { name: 'Control acreedores' },
+      user: { id: crypto.getRandomValues(new Uint8Array(16)), name: 'propietario', displayName: 'Propietario' },
+      pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+      authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged' },
+      timeout: 60000, attestation: 'none' } });
+    await setAj('huella', { id: b64(cred.rawId) });
+    toast('Huella activada'); return true;
+  } catch (e) { toast('No se pudo activar la huella'); return false; }
+}
+async function entrarConHuella() {
+  try {
+    await navigator.credentials.get({ publicKey: { challenge: crypto.getRandomValues(new Uint8Array(32)),
+      allowCredentials: [{ type: 'public-key', id: unb64(S.aj.huella.id) }], userVerification: 'required', timeout: 60000 } });
+    await desbloquear();
+  } catch (e) { toast('No se reconoció la huella. Usa tu contraseña.'); }
+}
+async function desbloquear() {
+  await cargarDatos();
+  S.desbloqueado = true; S.ultimaAct = Date.now(); S.intentos = 0;
+  history.replaceState({ vista: 'inicio' }, ''); S.vista = 'inicio';
+  render();
+  try { if (navigator.storage && navigator.storage.persist && !(await navigator.storage.persisted())) await navigator.storage.persist(); } catch { }
+}
+function bloquear() { S.desbloqueado = false; S.acreedores = []; S.movs = []; CV++; cerrarHoja(); render(); }
+['click', 'input', 'touchstart', 'keydown'].forEach(ev => document.addEventListener(ev, () => { S.ultimaAct = Date.now(); }, { passive: true }));
+const minutosBloqueo = () => S.aj.autoLock || 3;
+setInterval(() => { if (S.desbloqueado && Date.now() - S.ultimaAct > minutosBloqueo() * 60000) bloquear(); }, 15000);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') S.oculto = Date.now();
+  else { if (S.desbloqueado && S.oculto && Date.now() - S.oculto > minutosBloqueo() * 60000) bloquear(); else if (S.desbloqueado) render(); }
+});
+
+/* ---------- datos calculados ---------- */
+function datos() {
+  const h = hoy();
+  if (cache.v === CV && cache.h === h) return cache;
+  const filas = S.acreedores.map(a => ({ a, r: Motor.calcular(a, S.movs, h) })).sort((x, y) => x.a.nombre.localeCompare(y.a.nombre, 'es'));
+  const act = filas.filter(f => !f.r.cancelado), liq = filas.filter(f => f.r.cancelado);
+  const mes = h.slice(0, 7);
+  const pagos = S.movs.filter(m => m.tipo === 'pago' && !m.anulado);
+  const pm = pagos.filter(p => p.fecha.startsWith(mes));
+  const g = {
+    capitalDebo: Motor.suma(act, f => Math.max(0, f.r.capitalPendiente)),
+    interesPend: Motor.suma(act, f => f.r.interesVencido),
+    pagadoMes: Motor.suma(pm, 'interes'), abonado: Motor.suma(pagos, 'capital'), abonadoMes: Motor.suma(pm, 'capital'),
+    interesTotal: Motor.suma(pagos, 'interes')
+  };
+  const alertas = act.flatMap(f => f.r.periodos.filter(p => ['mora', 'hoy', 'proximo'].includes(p.alerta)).map(p => ({ a: f.a, p })))
+    .sort((x, y) => x.p.vence < y.p.vence ? -1 : x.p.vence > y.p.vence ? 1 : 0);
+  const proximos = act.filter(f => f.r.siguiente).map(f => ({ a: f.a, p: f.r.siguiente })).sort((x, y) => x.p.vence < y.p.vence ? -1 : 1);
+  const inconsist = filas.filter(f => f.r.inconsistencias.length);
+  cache = { v: CV, h, filas, act, liq, g, alertas, proximos, inconsist, porId: Object.fromEntries(filas.map(f => [f.a.id, f])) };
+  return cache;
+}
+function estadoAcr(r) {
+  if (r.cancelado) return ['liq', 'Liquidado'];
+  if (r.enMora.length) return [r.enMora[0].diasMora > 7 ? 'mora2' : 'mora', 'En mora'];
+  if (r.periodos.some(p => p.alerta === 'hoy')) return ['hoy', 'Vence hoy'];
+  if (r.periodos.some(p => p.alerta === 'proximo')) return ['prox', 'Por vencer'];
+  return ['ok', 'Al día'];
+}
+function textoAlerta(p) {
+  if (p.alerta === 'mora') return [p.diasMora > 7 ? 'mora2' : 'mora', `Mora: ${plural(p.diasMora, 'día', 'días')}`];
+  if (p.alerta === 'hoy') return ['hoy', 'Vence HOY'];
+  const d = Motor.diff(p.vence, hoy());
+  if (p.alerta === 'proximo') return ['prox', `Vence en ${plural(d, 'día', 'días')}`];
+  return ['gris', p.proyectado ? `En ${plural(d, 'día', 'días')}` : `En curso · ${plural(d, 'día', 'días')}`];
+}
+const txtRetraso = d => d === 0 ? 'a tiempo' : `${plural(d, 'día', 'días')} después del vencimiento`;
+
+/* ---------- utilidades de interfaz ---------- */
+function toast(t) { const el = $('#toast'); el.textContent = t; el.className = 'on'; clearTimeout(toast.t); toast.t = setTimeout(() => el.className = '', 3200); }
+let alCerrarHoja = null;
+function abrirHoja(html, onClose) {
+  if (alCerrarHoja) { const f = alCerrarHoja; alCerrarHoja = null; f(); }
+  $('#hoja').innerHTML = `<div class="hoja-fondo" data-a="cerrarHoja"></div><div class="hoja"><div class="asa"></div>${html}</div>`;
+  $('#hoja').classList.add('on'); alCerrarHoja = onClose || null;
+}
+function cerrarHoja() { $('#hoja').classList.remove('on'); $('#hoja').innerHTML = ''; if (alCerrarHoja) { const f = alCerrarHoja; alCerrarHoja = null; f(); } }
+function confirmar({ titulo, texto, ok = 'Confirmar', peligro = false, escribir = null }) {
+  return new Promise(res => {
+    abrirHoja(`<h3>${titulo}</h3><p>${texto}</p>
+      ${escribir ? `<div class="form"><label>Escribe <b>${escribir}</b> para confirmar<input id="cf-txt" autocomplete="off" autocapitalize="characters"></label></div>` : ''}
+      <div class="fila-btn"><button class="btn sec" id="cf-no">Cancelar</button><button class="btn ${peligro ? 'peligro' : 'primario'}" id="cf-si">${ok}</button></div>`, () => res(false));
+    $('#cf-no').onclick = () => cerrarHoja();
+    $('#cf-si').onclick = () => {
+      if (escribir && $('#cf-txt').value.trim().toUpperCase() !== escribir) { toast(`Escribe ${escribir} para confirmar`); return; }
+      alCerrarHoja = null; cerrarHoja(); res(true);
+    };
+  });
+}
+function ir(vista, extra = {}) {
+  Object.assign(S, { vista, bulk: false }, extra); S.sel = new Set();
+  history.pushState({ vista, fichaId: S.fichaId }, '');
+  cerrarHoja(); render(); window.scrollTo(0, 0);
+}
+window.addEventListener('popstate', e => {
+  if ($('#hoja').classList.contains('on')) cerrarHoja();
+  if (!S.desbloqueado) return;
+  const st = e.state || { vista: 'inicio' };
+  S.vista = st.vista; S.fichaId = st.fichaId; S.bulk = false; S.sel = new Set(); render();
+});
+const tasaValida = t => isFinite(t) && t >= 2 && t <= 10;
+
+/* ---------- componentes ---------- */
+function encabezado() {
+  const D = datos(); const n = D.alertas.length;
+  const [y, m, d] = hoy().split('-').map(Number);
+  const fecha = new Intl.DateTimeFormat('es-EC', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(y, m - 1, d));
+  return `<header class="top"><div class="marca">${LOGO}<div><h1>Control</h1><p>${fecha}</p></div></div>
+  <div class="acc"><button class="redondo" data-a="bloquear" aria-label="Bloquear">${ic(I.lock)}</button>
+  <button class="redondo" data-a="ir" data-v="ajustes" aria-label="Ajustes">${ic(I.ajustes)}</button>
+  <button class="pill-al ${n ? '' : 'cero'}" data-a="ir" data-v="pagos" aria-label="Alertas"><i></i>${n}</button></div></header>`;
+}
+function volver(txt = 'Volver') { return `<button class="volver" data-a="atras">${ic(I.back)} ${txt}</button>`; }
+function tarjeta(cls, icono, lbl, valor, extra = '', accion = '') {
+  return `<${accion ? 'button' : 'div'} class="tarjeta ${cls}" ${accion}><span class="ico">${ic(icono, 26)}</span><span class="lbl">${lbl}</span><span class="valor">${valor}</span>${extra ? `<span class="extra">${extra}</span>` : ''}</${accion ? 'button' : 'div'}>`;
+}
+function filaAlerta(x) {
+  const [cls, txt] = textoAlerta(x.p);
+  return `<button class="alerta ${cls}" data-a="ficha" data-id="${x.a.id}"><span class="punto"></span><span class="al-txt"><b>${esc(x.a.nombre)}</b><small>Vencimiento: ${fmtFc(x.p.vence)} · ${fmt(x.p.saldo)}</small></span><span class="al-est">${txt}</span></button>`;
+}
+function bannerRespaldo() {
+  if (!S.acreedores.length) return '';
+  const u = S.aj.ultimoRespaldo; const dias = u ? Math.floor((Date.now() - new Date(u).getTime()) / 864e5) : null;
+  if (dias !== null && dias < 7) return '';
+  return `<div class="aviso info"><b>${u ? `Tu último respaldo fue hace ${plural(dias, 'día', 'días')}` : 'Aún no has hecho un respaldo'}</b>Tus datos viven solo en este teléfono. Descarga un respaldo y guárdalo en Drive o WhatsApp.<div class="fila-btn"><button class="btn chico" data-a="respaldo">${ic(I.down, 18)} Descargar respaldo</button></div></div>`;
+}
+function bannerInconsist(D) {
+  if (!D.inconsist.length) return '';
+  return `<div class="aviso err"><b>Revisa estos datos</b>${D.inconsist.map(f => `<div style="margin-top:6px"><a href="#" data-a="ficha" data-id="${f.a.id}" style="color:inherit;font-weight:600">${esc(f.a.nombre)}</a>: ${f.r.inconsistencias.map(esc).join(' ')}</div>`).join('')}</div>`;
+}
+function dona(partes, tam = 132) {
+  const tot = partes.reduce((s, p) => s + p.v, 0) || 1; const r = 46, c = 2 * Math.PI * r; let off = 0;
+  const arcos = partes.filter(p => p.v > 0).map(p => { const l = c * p.v / tot; const s = `<circle cx="60" cy="60" r="${r}" fill="none" stroke="${p.color}" stroke-width="20" stroke-dasharray="${Math.max(0, l - (partes.filter(q => q.v > 0).length > 1 ? 2 : 0))} ${c}" stroke-dashoffset="${-off}" transform="rotate(-90 60 60)"/>`; off += l; return s; }).join('');
+  return `<svg width="${tam}" height="${tam}" viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="#ECEEE9" stroke-width="20"/>${arcos}</svg>`;
+}
+function cardDistribucion(debo) {
+  const propio = S.aj.capitalPropio;
+  if (propio == null) return `<div class="card"><h2 style="font-size:18px;margin-bottom:6px">Capital propio vs. de terceros</h2><p class="muted chico" style="margin:0 0 12px">Ingresa cuánto capital propio tienes trabajando para ver qué parte de tu negocio es tuya y qué parte es prestada.</p><button class="btn chico" data-a="capitalPropio">Ingresar capital propio</button></div>`;
+  const tot = propio + debo; const pp = tot ? Math.round(propio * 100 / tot) : 0;
+  return `<div class="card"><div class="sec-tit" style="margin:0 0 12px"><h2 style="font-size:18px">Capital propio vs. de terceros</h2><button class="link" data-a="capitalPropio">Editar</button></div>
+  <div class="dona-wrap">${dona([{ v: propio, color: '#224B3A' }, { v: debo, color: '#A47A25' }])}
+  <div class="leyenda" style="flex:1;min-width:0"><div><i style="background:#224B3A"></i>Propio<b>${pp}%</b></div><div style="margin-top:-4px;color:var(--muted);font-size:14px">${fmt(propio)}</div>
+  <div><i style="background:#A47A25"></i>De terceros<b>${tot ? 100 - pp : 0}%</b></div><div style="margin-top:-4px;color:var(--muted);font-size:14px">${fmt(debo)}</div>
+  <div style="border-top:1px solid var(--line);padding-top:6px">Total trabajando<b>${fmt(tot)}</b></div></div></div></div>`;
+}
+
+/* ---------- vistas ---------- */
+function vistaBloqueo() {
+  const nuevo = !S.aj.pass;
+  return `<div class="bloqueo">${LOGO}<h1>Control</h1><p class="muted" style="margin:4px 0 0">Mis acreedores · uso personal</p>
+  ${nuevo ? `<form data-form="crearClave" class="card form"><h3>Crea tu contraseña</h3><p class="muted chico" style="margin:0 0 14px">Solo tú podrás entrar. Si la olvidas, la única forma de recuperar tus datos es restaurar un respaldo.</p>
+    <label>Contraseña (mínimo 4 caracteres)<input type="password" name="p1" minlength="4" autocomplete="new-password" required></label>
+    <label>Repite la contraseña<input type="password" name="p2" autocomplete="new-password" required></label>
+    <button class="btn grande">Crear y entrar</button></form>`
+    : `<form data-form="entrar" class="card form"><label>Contraseña<input type="password" name="p" autocomplete="current-password" required></label>
+    <button class="btn grande">Entrar</button>
+    ${S.aj.huella ? `<button type="button" class="btn sec grande" data-a="huella">${ic(I.fp)} Entrar con huella</button>` : ''}</form>`}
+  <p class="muted chico" style="margin-top:18px">Versión ${VERSION}</p></div>`;
+}
+
+function vistaInicio() {
+  const D = datos(), g = D.g;
+  if (!S.acreedores.length) return encabezado() + `<div class="card" style="text-align:center;padding:30px 20px"><h2 style="font-size:22px;margin-bottom:8px">Bienvenido a Control</h2><p class="muted" style="margin:0 0 18px">Aquí llevarás el control del dinero que te prestan. Empieza registrando a tu primer acreedor. Si el préstamo es antiguo, pon su fecha original y luego marca qué meses ya pagaste.</p><button class="btn grande" data-a="nuevo">${ic(I.plus)} Agregar acreedor</button></div>` + cardDistribucion(0) + instalarCard();
+  return encabezado() + bannerInconsist(D) + bannerRespaldo() + instalarCard() + `
+  <div class="sec-tit" style="margin-top:6px"><h2>Alertas de pago</h2><button class="link" data-a="ir" data-v="pagos">Ver todo</button></div>
+  ${D.alertas.length ? D.alertas.slice(0, 6).map(filaAlerta).join('') : `<div class="vacio">${ic(I.checkc)} No tienes pagos vencidos, ni que venzan hoy o en los próximos 3 días.</div>`}
+  <p class="sub">Indicadores financieros</p>
+  <div class="grid2">
+    ${tarjeta('verde', I.wallet, 'Capital que debo', fmt(g.capitalDebo))}
+    ${tarjeta(g.interesPend > 0 ? 'roja' : 'blanca', I.alert, 'Intereses pendientes', fmt(g.interesPend), g.interesPend > 0 ? 'Vencidos y sin pagar' : 'Nada vencido')}
+    ${tarjeta('dorada', I.trend, 'Intereses pagados este mes', fmt(g.pagadoMes))}
+    ${tarjeta('blanca', I.coins, 'Capital abonado', fmt(g.abonado), `Este mes: ${fmt(g.abonadoMes)}`)}
+    ${tarjeta('blanca num chica', I.users, 'Acreedores activos', D.act.length, '', 'data-a="ir" data-v="acreedores"')}
+    ${tarjeta('blanca num chica', I.checkc, 'Deudas liquidadas', D.liq.length, '', 'data-a="verLiquidadas"')}
+  </div>
+  <div style="height:12px"></div>
+  ${cardDistribucion(g.capitalDebo)}
+  <div class="card"><h2 style="font-size:18px;margin-bottom:4px">Próximos pagos</h2>
+  ${D.proximos.length ? D.proximos.slice(0, 8).map(x => `<button class="prox-fila" data-a="ficha" data-id="${x.a.id}"><span><b style="font-weight:600">${esc(x.a.nombre)}</b><small>Mes ${x.p.n} · vence ${fmtF(x.p.vence)}</small></span><span class="pm">${fmt(x.p.saldo)}</span></button>`).join('') : '<p class="muted" style="margin:6px 0 0">No hay pagos próximos.</p>'}
+  </div>`;
+}
+let eventoInstalar = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); eventoInstalar = e; if (S.desbloqueado) render(); });
+function instalarCard() {
+  if (!eventoInstalar) return '';
+  return `<div class="aviso ok"><b>Instala Control en tu teléfono</b>Tendrás un ícono propio y funcionará sin internet.<div class="fila-btn"><button class="btn chico" data-a="instalar">Instalar app</button></div></div>`;
+}
+
+function vistaAcreedores() {
+  const D = datos();
+  const lista = S.filtroAcr === 'activos' ? D.act : S.filtroAcr === 'liquidados' ? D.liq : D.filas;
+  const chip = (v, t) => `<button class="chip ${S.filtroAcr === v ? 'on' : ''}" data-a="filtroAcr" data-v="${v}">${t}</button>`;
+  return encabezado() + `<div class="sec-tit" style="margin-top:0"><h2 style="font-size:24px">Acreedores</h2><button class="btn chico" data-a="nuevo">${ic(I.plus, 18)} Nuevo</button></div>
+  <div class="chips">${chip('activos', `Activos · ${D.act.length}`)}${chip('liquidados', `Liquidados · ${D.liq.length}`)}${chip('todos', 'Todos')}</div>
+  ${lista.length ? lista.map(({ a, r }) => {
+    const [pc, pt] = estadoAcr(r); const s = r.siguiente;
+    return `<button class="acr" data-a="ficha" data-id="${a.id}"><div class="a1"><b>${esc(a.nombre)}</b><span class="pill ${pc}">${pt}</span></div>
+    <div class="a2"><div><small>${r.cancelado ? 'Capital pendiente' : 'Le debo'}</small><div class="deuda">${fmt(Math.max(0, r.capitalPendiente))}</div></div>
+    <div style="text-align:right"><small>${fmtTasa(r.tasaActual)} mensual</small><br>${r.cancelado ? `<small>Liquidado ${r.fechaCancelacion ? fmtF(r.fechaCancelacion) : ''}</small>` : s ? `<small>Próx. ${fmtFc(s.vence)} · <b style="color:var(--gold)">${fmt(s.saldo)}</b></small>` : ''}</div></div></button>`;
+  }).join('') : `<div class="vacio">${S.filtroAcr === 'liquidados' ? 'Aún no has liquidado ninguna deuda.' : 'No hay acreedores en esta lista.'}</div>`}`;
+}
+
+function vistaPagos() {
+  const D = datos();
+  const mora = D.alertas.filter(x => x.p.alerta === 'mora'), hoyL = D.alertas.filter(x => x.p.alerta === 'hoy'), prox = D.alertas.filter(x => x.p.alerta === 'proximo');
+  const resto = D.proximos.filter(x => !['mora', 'hoy', 'proximo'].includes(x.p.alerta));
+  const card = x => {
+    const [cls, txt] = textoAlerta(x.p);
+    return `<div class="cobro"><div class="c-top"><b>${esc(x.a.nombre)}</b><span class="c-est ${cls}-t">${txt}</span></div>
+    <div class="c-sub">Vence: ${fmtF(x.p.vence)} · Mes ${x.p.n}</div>
+    <div class="c-bot"><div><small>${x.p.pagado ? `Saldo del mes (pagado ${fmt(x.p.pagado)})` : `Interés del mes (${fmtTasa(x.p.tasa)})`}</small><span class="c-monto">${fmt(x.p.saldo)}</span></div>
+    ${x.p.proyectado ? '' : `<button class="btn" data-a="pagar" data-id="${x.a.id}" data-n="${x.p.n}">Registrar pago</button>`}</div></div>`;
+  };
+  return encabezado() + `<h2 class="tit" style="margin-top:0">Gestor de pagos</h2>
+  ${!D.alertas.length ? `<div class="vacio">${ic(I.checkc)} Estás al día. No hay pagos vencidos ni próximos (3 días).</div>` : ''}
+  ${mora.length ? `<div class="grupo mora">En mora · ${mora.length}</div>${mora.map(card).join('')}` : ''}
+  ${hoyL.length ? `<div class="grupo hoy">Vencen hoy · ${hoyL.length}</div>${hoyL.map(card).join('')}` : ''}
+  ${prox.length ? `<div class="grupo prox">Próximos a vencer (3 días) · ${prox.length}</div>${prox.map(card).join('')}` : ''}
+  ${resto.length ? `<div class="grupo" style="color:var(--muted)">Más adelante · ${resto.length}</div>${resto.map(card).join('')}` : ''}`;
+}
+
+function opcionesPeriodo(r, pre) {
+  return `<option value="">Automático (mes pendiente más antiguo)</option>` + r.periodos.filter(p => p.saldo > 0).map(p => `<option value="${p.n}" ${pre == p.n ? 'selected' : ''}>Mes ${p.n} · vence ${fmtFc(p.vence)} · debe ${fmt(p.saldo)}</option>`).join('');
+}
+function vistaRegistrar() {
+  const D = datos(); const lista = D.act;
+  if (!lista.length) return encabezado() + `<h2 class="tit" style="margin-top:0">Registrar pago</h2><div class="vacio">No tienes acreedores activos.</div>`;
+  const pre = S.pre || {}; const acrId = pre.acrId && D.porId[pre.acrId] && !D.porId[pre.acrId].r.cancelado ? pre.acrId : lista[0].a.id;
+  const f = D.porId[acrId]; const per = pre.periodo ? f.r.periodos.find(p => p.n == pre.periodo) : null;
+  const sug = per ? per.saldo : (f.r.periodos.find(p => p.saldo > 0 && p.vence <= hoy()) || {}).saldo || 0;
+  return encabezado() + `<h2 class="tit" style="margin-top:0">Registrar pago</h2>
+  <form data-form="pago" class="card form" autocomplete="off">
+    <label>Acreedor<select name="acr">${lista.map(x => `<option value="${x.a.id}" ${x.a.id === acrId ? 'selected' : ''}>${esc(x.a.nombre)}</option>`).join('')}</select></label>
+    <label>Fecha del pago<input type="date" name="fecha" value="${pre.fecha || hoy()}" max="${hoy()}" min="${f.a.fechaRecepcion}" required></label>
+    <div class="dos"><label>Interés pagado<input name="interes" inputmode="decimal" placeholder="0,00" value="${montoInput(sug)}"></label>
+    <label>Abono a capital<input name="capital" inputmode="decimal" placeholder="0,00"></label></div>
+    <label>Aplicar el interés a<select name="periodo">${opcionesPeriodo(f.r, pre.periodo)}</select></label>
+    <label>Observación (opcional)<input name="obs" maxlength="200"></label>
+    <div id="prev" class="prev"></div>
+    <button class="btn grande">Guardar pago</button>
+  </form>
+  <p class="muted chico">El pago de interés <b>no</b> reduce el capital. El abono a capital sí lo reduce, y el interés con el nuevo capital empieza a contar desde el siguiente mes.</p>`;
+}
+function leerPago(form) {
+  const fd = new FormData(form); const a = S.acreedores.find(x => x.id === fd.get('acr'));
+  const interes = leerMonto(fd.get('interes')), capital = leerMonto(fd.get('capital'));
+  if (isNaN(interes) || isNaN(capital)) return { a, error: 'Revisa los montos: escribe solo números, por ejemplo 25,50.' };
+  const res = Motor.prepararPago(a, S.movs, { fecha: fd.get('fecha'), interes, capital, periodo: Number(fd.get('periodo')) || null, obs: String(fd.get('obs') || '').trim() }, hoy());
+  res.a = a; return res;
+}
+function previaPago(form) {
+  const el = form.querySelector('#prev'); if (!el) return;
+  const R = leerPago(form);
+  if (R.error) { const fd = new FormData(form); el.innerHTML = (fd.get('interes') || fd.get('capital')) ? `<span class="err">${esc(R.error)}</span>` : ''; return; }
+  const p = R.pago; let h = `<div class="muted chico">Total entregado</div><div class="p-tot">${fmt(p.interes + p.capital)}</div>`;
+  if (p.interes) {
+    h += `<div style="margin-top:8px"><b>Interés ${fmt(p.interes)}</b> se aplica a:</div><ul>` + p.asignaciones.map(s => {
+      const per = R.r2.periodos.find(x => x.n === s.periodo);
+      return `<li>Mes ${s.periodo} (vence ${fmtFc(per.vence)}): ${fmt(s.monto)} — ${per.saldo <= 0 ? 'queda <b>pagado</b>' : `queda debiendo ${fmt(per.saldo)}`}</li>`;
+    }).join('') + '</ul>';
+  }
+  if (p.capital) {
+    const nuevo = R.r2.capitalPendiente; let k = 1; while (Motor.inicioPeriodo(R.a, k) < p.fecha) k++;
+    const ini = Motor.inicioPeriodo(R.a, k);
+    h += `<div style="margin-top:8px"><b>Capital:</b> ${fmt(R.r0.capitalPendiente)} → <b>${fmt(nuevo)}</b></div>`;
+    if (nuevo > 0) h += `<div class="muted chico">Desde el Mes ${k} (empieza el ${fmtF(ini)}) el interés será ${fmt(Math.round(nuevo * R.r2.tasaActual / 100))} al mes.</div>`;
+    else h += `<div class="adv chico">El capital queda en cero. Si hay intereses pendientes, págalos o usa “Liquidar deuda” para cerrar la cuenta.</div>`;
+  }
+  if (R.nuevasInconsistencias.length) h += `<div class="adv chico" style="margin-top:8px">⚠ ${R.nuevasInconsistencias.map(esc).join(' ')}</div>`;
+  el.innerHTML = h;
+}
+
+function vistaFicha() {
+  const D = datos(); const f = D.porId[S.fichaId];
+  if (!f) { S.vista = 'acreedores'; return vistaAcreedores(); }
+  const { a, r } = f; const [pc, pt] = estadoAcr(r); const h = hoy();
+  const per = r.periodos.slice().reverse();
+  const movs = S.movs.filter(m => m.acreedorId === a.id).sort((x, y) => x.fecha < y.fecha ? 1 : x.fecha > y.fecha ? -1 : (y.creado || 0) - (x.creado || 0));
+  const vencidosPend = r.periodos.filter(p => p.saldo > 0 && p.vence <= h);
+  return `${volver('Acreedores')}
+  <div class="resumen"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div class="r-nom">${esc(a.nombre)}</div><span class="pill ${pc}" style="${pc === 'ok' ? 'background:rgba(255,255,255,.15);color:#fff' : ''}">${pt}</span></div>
+    <div class="r-lbl">Capital pendiente</div><div class="r-big">${fmt(Math.max(0, r.capitalPendiente))}</div>
+    <div class="r-grid">
+      <div><small>Capital original</small><b>${fmt(a.capital)}</b></div>
+      <div><small>Tasa actual</small><b>${fmtTasa(r.tasaActual)} mensual</b></div>
+      <div><small>Interés mensual actual</small><b>${fmt(r.interesMensualActual)}</b></div>
+      <div><small>Interés vencido sin pagar</small><b>${fmt(r.interesVencido)}</b></div>
+      <div><small>Intereses pagados</small><b>${fmt(r.interesPagado)}</b></div>
+      <div><small>Capital abonado</small><b>${fmt(r.capitalAbonado)}</b></div>
+      <div><small>Recibido el</small><b>${fmtF(a.fechaRecepcion)}</b></div>
+      <div><small>Día de pago</small><b>${a.diaPago} de cada mes</b></div>
+    </div></div>
+  ${r.inconsistencias.length ? `<div class="aviso err"><b>Hay datos que revisar</b><ul>${r.inconsistencias.map(x => `<li>${esc(x)}</li>`).join('')}</ul><div class="chico" style="margin-top:6px">Para corregir, anula el movimiento equivocado (abajo, en Movimientos) y regístralo de nuevo.</div></div>` : ''}
+  ${r.cancelado ? `<div class="aviso ok"><b>Deuda liquidada${r.fechaCancelacion ? ` el ${fmtF(r.fechaCancelacion)}` : ''}</b>Los ${fmt(a.capital)} que eran de ${esc(a.nombre)} ya no son una obligación. Ese capital pasa a ser tuyo, siempre que el dinero siga disponible o invertido en tus préstamos. Todo el historial se conserva.</div>` : ''}
+  ${a.obs ? `<div class="obs"><span class="muted chico">Observaciones</span><br>${esc(a.obs)}</div>` : ''}
+  ${r.cancelado ? '' : `<div class="acciones-ficha">
+    <button class="btn" data-a="pagar" data-id="${a.id}">${ic(I.zap, 18)} Registrar pago</button>
+    <button class="btn oro" data-a="liquidar">${ic(I.checkc, 18)} Liquidar deuda</button>
+    <button class="btn sec" data-a="tasa">${ic(I.percent, 18)} Cambiar tasa</button>
+    <button class="btn sec" data-a="editar">Editar datos</button></div>`}
+  ${r.cancelado ? `<div class="acciones-ficha"><button class="btn sec" data-a="editar">Editar datos</button></div>` : ''}
+  <div class="sec-tit"><h2>Mensualidades · ${r.periodos.length}</h2>${vencidosPend.length ? `<button class="link" data-a="bulk">${S.bulk ? 'Cancelar' : 'Marcar varios'}</button>` : ''}</div>
+  ${S.bulk ? `<div class="aviso info">Selecciona los meses que ya pagaste. Cada uno se registrará como pagado completo <b>en su fecha de vencimiento</b>. <button class="link" data-a="selTodos">Seleccionar todos</button></div>` : ''}
+  ${r.periodos.length && r.periodos.some(p => p.vence <= h && p.estado === 'pendiente') && !S.bulk ? `<div class="aviso info chico">Consejo para historial antiguo: registra <b>primero</b> los abonos a capital con su fecha real, y <b>después</b> marca los meses pagados. Así cada mes se calcula con el capital correcto.</div>` : ''}
+  ${per.length ? per.map(p => filaPeriodo(p)).join('') : `<div class="vacio">Aún no hay mensualidades.</div>`}
+  <div class="sec-tit"><h2>Movimientos · ${movs.length}</h2></div>
+  ${movs.length ? movs.map(m => filaMov(m)).join('') : `<div class="vacio">Sin movimientos registrados.</div>`}
+  ${(a.cambios || []).length ? `<details class="plegable"><summary>Cambios en los datos (${a.cambios.length})</summary>${a.cambios.slice().reverse().map(c => `<div class="m-l" style="margin-top:8px">${fmtF(c.fecha)} · <b>${esc(c.campo)}</b>: ${esc(c.antes)} → ${esc(c.despues)}</div>`).join('')}</details>` : ''}
+  ${S.bulk ? `<div class="barra-sel"><button class="btn grande" data-a="bulkOk" ${S.sel.size ? '' : 'disabled'}>${ic(I.check, 18)} Marcar ${plural(S.sel.size, 'mes', 'meses')} como pagados</button></div><div style="height:70px"></div>` : ''}`;
+}
+function filaPeriodo(p) {
+  const h = hoy(); let pc, pt, cls = '';
+  if (p.estado === 'pagado') { pc = 'ok'; pt = 'Pagado'; cls = 'pagado'; }
+  else if (p.alerta === 'mora') { pc = p.diasMora > 7 ? 'mora2' : 'mora'; pt = `${p.estado === 'parcial' ? 'Parcial · ' : ''}Mora ${plural(p.diasMora, 'día', 'días')}`; cls = 'mora'; }
+  else if (p.alerta === 'hoy') { pc = 'hoy'; pt = p.estado === 'parcial' ? 'Parcial · vence hoy' : 'Vence hoy'; cls = p.estado === 'parcial' ? 'parcial' : ''; }
+  else if (p.alerta === 'proximo') { pc = 'prox'; pt = `${p.estado === 'parcial' ? 'Parcial · ' : ''}Vence en ${plural(Motor.diff(p.vence, h), 'día', 'días')}`; cls = p.estado === 'parcial' ? 'parcial' : ''; }
+  else { pc = p.estado === 'parcial' ? 'parcial' : 'gris'; pt = p.estado === 'parcial' ? 'Parcial · en curso' : 'En curso'; cls = p.estado === 'parcial' ? 'parcial' : ''; }
+  const puedeSel = S.bulk && p.saldo > 0 && p.vence <= h;
+  return `<div class="per ${cls}">${puedeSel ? `<input type="checkbox" class="chk" data-a="sel" data-n="${p.n}" ${S.sel.has(p.n) ? 'checked' : ''} aria-label="Seleccionar mes ${p.n}">` : ''}
+  <div class="per-cuerpo"><div class="per-top"><b>Mes ${p.n}</b><span class="pill ${pc}">${pt}</span></div>
+  <div class="per-l">${fmtFc(p.inicio)} → vence <b>${fmtF(p.vence)}</b></div>
+  <div class="per-l">${fmt(p.capital)} × ${fmtTasa(p.tasa)} = <b>${fmt(p.interes)}</b></div>
+  ${p.pagado ? `<div class="per-l">Pagado ${fmt(p.pagado)}${p.fechaPago ? ` · el ${fmtF(p.fechaPago)}` : ''}${p.diasRetraso != null ? ` · <b style="color:${p.diasRetraso ? 'var(--gold)' : 'var(--green)'}">${txtRetraso(p.diasRetraso)}</b>` : ''}${p.saldo > 0 ? ` · <span class="rojo">falta ${fmt(p.saldo)}</span>` : ''}</div>` : ''}
+  ${p.nota ? `<div class="per-nota">${esc(p.nota)}</div>` : ''}
+  ${S.bulk ? '' : `<div class="per-acc">${p.saldo > 0 ? `<button class="btn chico" data-a="marcar" data-n="${p.n}">${p.pagado ? 'Pagar saldo' : 'Marcar pagado'}</button>` : ''}<button class="btn chico sec" data-a="nota" data-n="${p.n}">${p.nota ? 'Editar nota' : 'Nota'}</button></div>`}
+  </div></div>`;
+}
+function filaMov(m, conNombre = false) {
+  const nom = conNombre ? (S.acreedores.find(a => a.id === m.acreedorId) || {}).nombre || '—' : '';
+  const anul = m.anulado ? `<div class="m-l rojo">Anulado el ${fmtF(m.anuladoEn)}${m.motivo ? ` · ${esc(m.motivo)}` : ''}</div>` : '';
+  if (m.tipo === 'tasa') return `<div class="mov ${m.anulado ? 'anulado' : ''}"><div class="m1"><b>${conNombre ? esc(nom) + ' · ' : ''}Cambio de tasa a ${fmtTasa(m.tasa)}</b></div><div class="m-l">Aplica desde ${fmtF(m.fecha)}${m.obs ? ` · ${esc(m.obs)}` : ''}</div>${anul}${!m.anulado && !conNombre ? `<div class="m-acc"><button class="btn chico sec" data-a="anular" data-id="${m.id}">Anular</button></div>` : ''}</div>`;
+  const tit = m.liquidacion ? 'Liquidación total' : m.interes && m.capital ? 'Interés + abono a capital' : m.interes ? 'Pago de interés' : 'Abono a capital';
+  return `<div class="mov ${m.anulado ? 'anulado' : ''}" ${conNombre ? `data-a="ficha" data-id="${m.acreedorId}"` : ''}><div class="m1"><b>${conNombre ? esc(nom) + ' · ' : ''}${tit}</b><span class="m-tot">${fmt(m.interes + m.capital)}</span></div>
+  <div class="m-l">${fmtF(m.fecha)}</div>
+  ${m.interes ? `<div class="m-l">Interés ${fmt(m.interes)}: ${(m.asignaciones || []).map(s => `Mes ${s.periodo} ${fmt(s.monto)}`).join(', ')}</div>` : ''}
+  ${m.capital ? `<div class="m-l">Abono a capital ${fmt(m.capital)}</div>` : ''}
+  ${m.obs ? `<div class="m-l">“${esc(m.obs)}”</div>` : ''}${anul}
+  ${!m.anulado && !conNombre ? `<div class="m-acc"><button class="btn chico sec" data-a="anular" data-id="${m.id}">Anular</button></div>` : ''}</div>`;
+}
+
+function vistaFormAcreedor() {
+  const ed = S.vista === 'editar'; const a = ed ? S.acreedores.find(x => x.id === S.fichaId) : null;
+  if (ed && !a) { S.vista = 'acreedores'; return vistaAcreedores(); }
+  const v = a || { nombre: '', capital: 0, tasa: 5, fechaRecepcion: hoy(), diaPago: Number(hoy().slice(8)), obs: '' };
+  return `${volver()}<h2 class="tit">${ed ? 'Editar acreedor' : 'Nuevo acreedor'}</h2>
+  ${ed ? `<div class="aviso info chico">Cambiar el capital original, la fecha, el día de pago o la tasa inicial <b>recalcula todo el historial</b> de este acreedor. Los pagos registrados no se borran. Cada cambio queda anotado.</div>` : ''}
+  <form data-form="acreedor" class="card form" autocomplete="off">
+    <label>Nombre completo<input name="nombre" value="${esc(v.nombre)}" maxlength="80" required></label>
+    <label>Capital que me prestó<input name="capital" inputmode="decimal" placeholder="0,00" value="${montoInput(v.capital)}" required></label>
+    <label>Tasa de interés mensual (2% a 10%)<div class="tasa-fila"><input type="range" name="tasaR" min="2" max="10" step="0.5" value="${v.tasa}"><input type="number" name="tasa" min="2" max="10" step="0.01" value="${v.tasa}" inputmode="decimal" required></div></label>
+    <div class="dos"><label>Fecha en que lo recibí<input type="date" name="fecha" value="${v.fechaRecepcion}" max="${hoy()}" required></label>
+    <label>Día de pago<input type="number" name="dia" min="1" max="31" value="${v.diaPago}" inputmode="numeric" required data-tocado="${ed ? 1 : 0}"></label></div>
+    <label>Observaciones (opcional)<textarea name="obs" maxlength="600">${esc(v.obs)}</textarea></label>
+    <div id="prevAcr" class="prev"></div>
+    <button class="btn grande">${ed ? 'Guardar cambios' : 'Guardar acreedor'}</button>
+  </form>
+  ${ed ? `<div class="card"><b>Eliminar acreedor</b><p class="muted chico" style="margin:6px 0 12px">Solo para corregir un registro hecho por error. Borra al acreedor y todos sus movimientos. Si la deuda ya terminó, usa “Liquidar deuda”, que conserva el historial.</p><button class="btn peligro chico" data-a="eliminarAcr">Eliminar acreedor</button></div>` : ''}`;
+}
+function previaAcreedor(form) {
+  const el = form.querySelector('#prevAcr'); if (!el) return;
+  const fd = new FormData(form); const cap = leerMonto(fd.get('capital')); const tasa = Number(fd.get('tasa')); const fecha = fd.get('fecha'); const dia = Number(fd.get('dia'));
+  if (!(cap > 0) || !tasaValida(tasa) || !fecha || !(dia >= 1 && dia <= 31)) { el.innerHTML = tasaValida(tasa) || !fd.get('tasa') ? '' : '<span class="err">La tasa debe estar entre 2% y 10%.</span>'; return; }
+  const a = { id: 'x', capital: cap, tasa, fechaRecepcion: fecha, diaPago: dia };
+  const v1 = Motor.vencimiento(fecha, dia, 1);
+  const r = Motor.calcular(a, [], hoy()); const venc = r.periodos.filter(p => p.vence <= hoy()).length;
+  el.innerHTML = `Interés mensual: <b>${fmt(Math.round(cap * tasa / 100))}</b><br>Primer pago: <b>${fmtF(v1)}</b>${venc ? `<br><span class="adv">Ya vencieron ${plural(venc, 'mensualidad', 'mensualidades')}. Se crearán como <b>pendientes</b>; luego marcas cuáles pagaste.</span>` : ''}`;
+}
+
+function vistaHistorial() {
+  const D = datos(); const tab = (v, t) => `<button class="chip ${S.histTab === v ? 'on' : ''}" data-a="histTab" data-v="${v}">${t}</button>`;
+  let cuerpo = '';
+  if (S.histTab === 'pagos') {
+    let movs = S.movs.filter(m => m.tipo === 'pago');
+    if (S.histAcr) movs = movs.filter(m => m.acreedorId === S.histAcr);
+    if (S.histTipo === 'interes') movs = movs.filter(m => m.interes > 0);
+    if (S.histTipo === 'capital') movs = movs.filter(m => m.capital > 0);
+    movs.sort((x, y) => x.fecha < y.fecha ? 1 : x.fecha > y.fecha ? -1 : (y.creado || 0) - (x.creado || 0));
+    const ok = movs.filter(m => !m.anulado);
+    cuerpo = `<div class="form" style="display:grid;grid-template-columns:1.3fr 1fr;gap:10px">
+      <label>Acreedor<select data-filtro="histAcr"><option value="">Todos</option>${D.filas.map(f => `<option value="${f.a.id}" ${S.histAcr === f.a.id ? 'selected' : ''}>${esc(f.a.nombre)}</option>`).join('')}</select></label>
+      <label>Tipo<select data-filtro="histTipo"><option value="">Todos</option><option value="interes" ${S.histTipo === 'interes' ? 'selected' : ''}>Intereses</option><option value="capital" ${S.histTipo === 'capital' ? 'selected' : ''}>Capital</option></select></label></div>
+      <div class="grid2" style="margin-bottom:14px">${tarjeta('dorada chica', I.trend, 'Intereses pagados', fmt(Motor.suma(ok, 'interes')))}${tarjeta('verde chica', I.coins, 'Capital abonado', fmt(Motor.suma(ok, 'capital')))}</div>
+      ${movs.length ? movs.map(m => filaMov(m, true)).join('') : '<div class="vacio">No hay pagos con estos filtros.</div>'}`;
+  } else if (S.histTab === 'mensual') {
+    const ev = Motor.evolucionMensual(S.acreedores, S.movs, hoy());
+    const ult = ev.slice(-12); const max = Math.max(1, ...ult.map(x => x.deuda));
+    const bw = 300 / Math.max(ult.length, 1);
+    const barras = ult.map((x, i) => { const hgt = Math.round(110 * x.deuda / max); return `<rect x="${i * bw + 3}" y="${120 - hgt}" width="${bw - 6}" height="${hgt}" rx="3" fill="#224B3A"/><text x="${i * bw + bw / 2}" y="134" text-anchor="middle" font-size="9" fill="#5D6A61">${MESES[Number(x.mes.slice(5)) - 1]}</text>`; }).join('');
+    cuerpo = ev.length ? `<div class="card"><b>Capital que debía al cierre de cada mes</b><svg class="barras" viewBox="0 0 300 140" style="margin-top:10px">${barras}</svg></div>
+      ${ev.slice().reverse().map(x => `<div class="mes"><div class="mes-t"><b>${fmtMes(x.mes)}</b><span class="mes-d">${fmt(x.deuda)}</span></div><div class="muted chico">Capital adeudado al cierre</div>
+      <div class="mes-g"><span>Interés generado <b>${fmt(x.generado)}</b></span><span>Interés pagado <b>${fmt(x.interesPagado)}</b></span><span>Capital abonado <b>${fmt(x.capitalAbonado)}</b></span><span>Capital recibido <b>${fmt(x.recibido)}</b></span></div></div>`).join('')}` : '<div class="vacio">Sin datos todavía.</div>';
+  } else if (S.histTab === 'pendientes') {
+    const pend = D.act.flatMap(f => f.r.periodos.filter(p => p.saldo > 0 && p.vence <= hoy()).map(p => ({ a: f.a, p })));
+    cuerpo = pend.length ? `<div class="aviso err"><b>Total vencido sin pagar: ${fmt(Motor.suma(pend, x => x.p.saldo))}</b>${plural(pend.length, 'mensualidad', 'mensualidades')}</div>` + pend.map(x => `<button class="acr" data-a="ficha" data-id="${x.a.id}"><div class="a1"><b>${esc(x.a.nombre)}</b><span class="pill ${x.p.diasMora > 7 ? 'mora2' : x.p.alerta === 'hoy' ? 'hoy' : 'mora'}">${x.p.alerta === 'hoy' ? 'Vence hoy' : `Mora ${plural(x.p.diasMora, 'día', 'días')}`}</span></div><div class="a2"><small>Mes ${x.p.n} · venció ${fmtF(x.p.vence)}</small><b style="color:var(--gold)">${fmt(x.p.saldo)}</b></div></button>`).join('') : `<div class="vacio">${ic(I.checkc)} No tienes meses vencidos sin pagar.</div>`;
+  } else {
+    cuerpo = D.liq.length ? D.liq.map(({ a, r }) => `<button class="acr" data-a="ficha" data-id="${a.id}"><div class="a1"><b>${esc(a.nombre)}</b><span class="pill liq">Liquidado</span></div><div class="a2"><div><small>Capital liberado</small><div class="deuda">${fmt(a.capital)}</div></div><div style="text-align:right"><small>${r.fechaCancelacion ? fmtF(r.fechaCancelacion) : ''}</small><br><small>Intereses pagados ${fmt(r.interesPagado)}</small></div></div></button>`).join('')
+      + `<div class="aviso ok"><b>Total de capital liberado: ${fmt(Motor.suma(D.liq, f => f.a.capital))}</b>Capital que antes era de terceros y ya no es una obligación.</div>` : '<div class="vacio">Aún no has liquidado ninguna deuda.</div>';
+  }
+  return encabezado() + `<h2 class="tit" style="margin-top:0">Historial</h2><div class="chips">${tab('pagos', 'Pagos')}${tab('mensual', 'Evolución mensual')}${tab('pendientes', 'Meses pendientes')}${tab('liquidadas', 'Liquidadas')}</div>${cuerpo}`;
+}
+
+function vistaAjustes() {
+  const u = S.aj.ultimoRespaldo;
+  return `${volver()}<h2 class="tit">Ajustes</h2>
+  <div class="card"><b style="font-size:18px">Capital propio</b>
+    <div class="ajuste"><div>${S.aj.capitalPropio != null ? fmt(S.aj.capitalPropio) : 'Sin ingresar'}<small>Lo usas para ver tu capital propio frente al de terceros.</small></div><button class="btn chico sec" data-a="capitalPropio">Editar</button></div></div>
+  <div class="card"><b style="font-size:18px">Seguridad</b>
+    <div class="ajuste"><div>Contraseña<small>Necesaria para entrar.</small></div><button class="btn chico sec" data-a="cambiarClave">Cambiar</button></div>
+    <div class="ajuste"><div>Huella digital<small id="huellaInfo">${S.aj.huella ? 'Activada' : 'Desactivada'}</small></div>${S.aj.huella ? '<button class="btn chico sec" data-a="quitarHuella">Desactivar</button>' : '<button class="btn chico" data-a="activarHuella">Activar</button>'}</div>
+    <div class="ajuste"><div>Bloqueo automático<small>Se bloquea tras este tiempo sin uso.</small></div><select data-filtro="autoLock" style="border:1.5px solid var(--line);border-radius:12px;padding:10px;background:#fff">${[1, 3, 5, 10].map(m => `<option value="${m}" ${minutosBloqueo() === m ? 'selected' : ''}>${m} min</option>`).join('')}</select></div></div>
+  <div class="card"><b style="font-size:18px">Respaldo</b>
+    <p class="muted chico" style="margin:6px 0 4px">Tus datos se guardan solo en este teléfono. Haz un respaldo cada semana y guárdalo fuera del teléfono (Drive, correo o WhatsApp).</p>
+    <p class="chico" style="margin:0 0 12px">Último respaldo: <b>${u ? fmtF(u.slice(0, 10)) : 'nunca'}</b></p>
+    <div class="fila-btn" style="flex-wrap:wrap"><button class="btn" data-a="respaldo">${ic(I.down, 18)} Descargar</button>${navigator.canShare ? `<button class="btn sec" data-a="compartirRespaldo">${ic(I.share, 18)} Enviar a…</button>` : ''}</div>
+    <div class="fila-btn"><button class="btn sec" data-a="restaurar">${ic(I.up, 18)} Restaurar desde un respaldo</button></div>
+    <input type="file" id="archivoRespaldo" accept=".json,application/json" hidden></div>
+  <div class="card"><b style="font-size:18px">Almacenamiento</b><p class="muted chico" id="infoAlm" style="margin:6px 0 0">Comprobando…</p></div>
+  ${eventoInstalar ? `<div class="card"><b style="font-size:18px">Instalar</b><div class="fila-btn"><button class="btn" data-a="instalar">Instalar Control en este teléfono</button></div></div>` : ''}
+  <div class="card"><b style="font-size:18px;color:var(--red)">Borrar todo</b><p class="muted chico" style="margin:6px 0 12px">Elimina todos los datos y la contraseña de este teléfono. Descarga un respaldo antes.</p><button class="btn peligro chico" data-a="borrarTodo">Borrar todos los datos</button></div>
+  <p class="muted chico" style="text-align:center">Control · versión ${VERSION}</p>`;
+}
+async function infoAlmacenamiento() {
+  const el = $('#infoAlm'); if (!el) return;
+  let t = `${plural(S.acreedores.length, 'acreedor', 'acreedores')} y ${plural(S.movs.length, 'movimiento', 'movimientos')} guardados. `;
+  try { const p = navigator.storage && navigator.storage.persisted ? await navigator.storage.persisted() : false; t += p ? 'Almacenamiento protegido: el teléfono no borrará estos datos por falta de espacio.' : 'El teléfono aún no marcó los datos como protegidos (al instalar la app suele activarse). Haz respaldos con frecuencia.'; } catch { }
+  el.textContent = t;
+}
+
+function nav() {
+  const n = datos().alertas.length;
+  const b = (v, i, t, extra = '') => `<button class="${S.vista === v || (v === 'acreedores' && ['ficha', 'nuevo', 'editar'].includes(S.vista)) ? 'on' : ''}" data-a="ir" data-v="${v}">${ic(i, 25)}${extra}<span>${t}</span></button>`;
+  return b('inicio', I.home, 'Inicio') + b('acreedores', I.users, 'Acreedores') + b('pagos', I.cal, 'Pagos', n ? `<span class="badge">${n}</span>` : '') + b('registrar', I.zap, 'Registrar') + b('historial', I.hist, 'Historial');
+}
+
+function render() {
+  if (!S.listo) return;
+  document.body.classList.toggle('sin-nav', !S.desbloqueado);
+  if (!S.desbloqueado) { $('#app').innerHTML = vistaBloqueo(); $('#nav').innerHTML = ''; return; }
+  const V = { inicio: vistaInicio, acreedores: vistaAcreedores, ficha: vistaFicha, pagos: vistaPagos, registrar: vistaRegistrar, historial: vistaHistorial, ajustes: vistaAjustes, nuevo: vistaFormAcreedor, editar: vistaFormAcreedor };
+  $('#app').innerHTML = (V[S.vista] || vistaInicio)();
+  $('#nav').innerHTML = nav();
+  const fp = document.querySelector('form[data-form="pago"]'); if (fp) previaPago(fp);
+  const fa = document.querySelector('form[data-form="acreedor"]'); if (fa) previaAcreedor(fa);
+  if (S.vista === 'ajustes') infoAlmacenamiento();
+}
+
+/* ---------- acciones ---------- */
+const fichaActual = () => datos().porId[S.fichaId];
+const ACC = {
+  cerrarHoja: () => cerrarHoja(),
+  ir: d => ir(d.v),
+  atras: () => history.back(),
+  bloquear: () => bloquear(),
+  huella: () => entrarConHuella(),
+  nuevo: () => ir('nuevo'),
+  editar: () => ir('editar'),
+  ficha: d => ir('ficha', { fichaId: d.id }),
+  filtroAcr: d => { S.filtroAcr = d.v; render(); },
+  verLiquidadas: () => { S.filtroAcr = 'liquidados'; ir('acreedores'); },
+  histTab: d => { S.histTab = d.v; render(); },
+  pagar: d => ir('registrar', { pre: { acrId: d.id, periodo: d.n ? Number(d.n) : null } }),
+  instalar: async () => { if (!eventoInstalar) return; eventoInstalar.prompt(); await eventoInstalar.userChoice; eventoInstalar = null; render(); },
+  bulk: () => { S.bulk = !S.bulk; S.sel = new Set(); render(); },
+  sel: (d, el) => { const n = Number(d.n); el.checked ? S.sel.add(n) : S.sel.delete(n); const b = $('.barra-sel .btn'); if (b) { b.disabled = !S.sel.size; b.innerHTML = `${ic(I.check, 18)} Marcar ${plural(S.sel.size, 'mes', 'meses')} como pagados`; } },
+  selTodos: () => { const f = fichaActual(); f.r.periodos.filter(p => p.saldo > 0 && p.vence <= hoy()).forEach(p => S.sel.add(p.n)); render(); },
+  bulkOk: async () => {
+    const f = fichaActual(); const ps = f.r.periodos.filter(p => S.sel.has(p.n) && p.saldo > 0);
+    if (!ps.length) return;
+    const ok = await confirmar({ titulo: `Marcar ${plural(ps.length, 'mes', 'meses')} como pagados`, texto: `Se registrará un pago de interés por cada mes, en su fecha de vencimiento, por un total de <b>${fmt(Motor.suma(ps, 'saldo'))}</b>.`, ok: 'Sí, marcar' });
+    if (!ok) return;
+    const t = Date.now();
+    await guardarMov(...ps.map((p, i) => ({ id: uid(), tipo: 'pago', acreedorId: f.a.id, fecha: p.vence, interes: p.saldo, capital: 0, asignaciones: [{ periodo: p.n, monto: p.saldo }], obs: 'Registro de historial', creado: t + i })));
+    S.bulk = false; S.sel = new Set(); render(); toast(`${plural(ps.length, 'mes marcado', 'meses marcados')} como pagados`);
+  },
+  marcar: d => {
+    const f = fichaActual(); const p = f.r.periodos.find(x => x.n === Number(d.n)); const h = hoy();
+    abrirHoja(`<h3>Mes ${p.n} · vence ${fmtF(p.vence)}</h3><p>Interés del mes: <b>${fmt(p.interes)}</b> (${fmt(p.capital)} × ${fmtTasa(p.tasa)})${p.pagado ? ` · ya pagado ${fmt(p.pagado)}` : ''}</p>
+    <form data-form="marcar" data-n="${p.n}" class="form" autocomplete="off">
+      <label>Fecha en que pagaste<input type="date" name="fecha" value="${p.vence <= h ? p.vence : h}" max="${h}" min="${f.a.fechaRecepcion}" required></label>
+      <label>Monto pagado<input name="monto" inputmode="decimal" value="${montoInput(p.saldo)}" required><div class="ayuda">Si pagaste menos, el mes queda como PARCIAL.</div></label>
+      <label>Observación (opcional)<input name="obs" maxlength="200"></label>
+      <button class="btn grande">Guardar</button></form>`);
+  },
+  nota: d => {
+    const f = fichaActual(); const n = Number(d.n);
+    abrirHoja(`<h3>Nota del Mes ${n}</h3><form data-form="nota" data-n="${n}" class="form"><label>Nota<textarea name="nota" maxlength="500">${esc((f.a.notas || {})[n] || '')}</textarea></label><button class="btn grande">Guardar nota</button></form>`);
+  },
+  anular: d => {
+    const m = S.movs.find(x => x.id === d.id);
+    abrirHoja(`<h3>Anular movimiento</h3><p>El movimiento no se borra: queda tachado en el historial y deja de contar en los cálculos. Si fue un error, después regístralo de nuevo correctamente.</p>
+    <form data-form="anular" data-id="${m.id}" class="form"><label>Motivo<input name="motivo" required maxlength="200" placeholder="Ej.: monto equivocado"></label><button class="btn peligro grande">Anular movimiento</button></form>`);
+  },
+  tasa: () => {
+    const f = fichaActual(); const h = hoy(); const ps = f.r.periodos; const ks = ps.map(p => p.n); const sig = (ps.length ? ps[ps.length - 1].n : 0) + 1;
+    const ops = ks.concat([sig, sig + 1]).map(k => ({ k, ini: Motor.inicioPeriodo(f.a, k) }));
+    const def = ops.find(o => o.ini > h) || ops[ops.length - 1];
+    abrirHoja(`<h3>Cambiar tasa de interés</h3><p>Tasa actual: <b>${fmtTasa(f.r.tasaActual)}</b>. La nueva tasa se aplica desde el mes que elijas; los meses anteriores no cambian.</p>
+    <form data-form="tasa" class="form"><label>Nueva tasa mensual (2% a 10%)<input type="number" name="tasa" min="2" max="10" step="0.01" inputmode="decimal" required></label>
+    <label>Aplicar desde<select name="desde">${ops.map(o => `<option value="${o.ini}" ${o === def ? 'selected' : ''}>Mes ${o.k} (empieza el ${fmtF(o.ini)})</option>`).join('')}</select></label>
+    <label>Observación (opcional)<input name="obs" maxlength="200"></label><button class="btn grande">Guardar nueva tasa</button></form>`);
+  },
+  liquidar: () => {
+    const f = fichaActual(); const h = hoy();
+    abrirHoja(`<h3>Liquidar deuda con ${esc(f.a.nombre)}</h3><p>Se paga todo el capital pendiente y todos los intereses pendientes. El mes en curso se cobra <b>completo</b>.</p>
+    <form data-form="liquidar" class="form" autocomplete="off"><label>Fecha del pago final<input type="date" name="fecha" value="${h}" max="${h}" min="${f.a.fechaRecepcion}" required></label>
+    <div id="prevLiq" class="prev"></div><label>Observación (opcional)<input name="obs" maxlength="200"></label>
+    <button class="btn oro grande">Confirmar liquidación</button></form>`);
+    previaLiq($('form[data-form="liquidar"]'));
+  },
+  capitalPropio: () => abrirHoja(`<h3>Capital propio</h3><p>¿Cuánto dinero propio (no prestado) tienes trabajando en tu negocio? Lo actualizas tú cuando quieras. No afecta a Cartera.</p>
+    <form data-form="capitalPropio" class="form"><label>Capital propio<input name="monto" inputmode="decimal" value="${montoInput(S.aj.capitalPropio || 0)}" required></label><button class="btn grande">Guardar</button></form>`),
+  cambiarClave: () => abrirHoja(`<h3>Cambiar contraseña</h3><form data-form="cambiarClave" class="form"><label>Contraseña actual<input type="password" name="a" required></label><label>Nueva contraseña<input type="password" name="p1" minlength="4" required></label><label>Repite la nueva<input type="password" name="p2" required></label><button class="btn grande">Cambiar</button></form>`),
+  activarHuella: async () => { if (!(await huellaDisponible())) { toast('Este teléfono o navegador no permite usar la huella aquí.'); return; } if (await activarHuella()) render(); },
+  quitarHuella: async () => { await delAj('huella'); render(); toast('Huella desactivada'); },
+  respaldo: () => descargarRespaldo(),
+  compartirRespaldo: () => compartirRespaldo(),
+  restaurar: () => { const i = $('#archivoRespaldo'); i.value = ''; i.click(); },
+  eliminarAcr: async () => {
+    const a = S.acreedores.find(x => x.id === S.fichaId);
+    const ok = await confirmar({ titulo: 'Eliminar acreedor', texto: `Se borrará a <b>${esc(a.nombre)}</b> y todos sus movimientos. Esto no se puede deshacer.`, ok: 'Eliminar', peligro: true, escribir: 'ELIMINAR' });
+    if (!ok) return;
+    const ids = S.movs.filter(m => m.acreedorId === a.id).map(m => m.id);
+    if (ids.length) await DB.borrar('movimientos', ...ids);
+    await DB.borrar('acreedores', a.id);
+    S.movs = S.movs.filter(m => m.acreedorId !== a.id); S.acreedores = S.acreedores.filter(x => x.id !== a.id); CV++;
+    ir('acreedores'); toast('Acreedor eliminado');
+  },
+  borrarTodo: async () => {
+    const ok = await confirmar({ titulo: 'Borrar todos los datos', texto: 'Se borrarán todos los acreedores, pagos, ajustes y la contraseña de este teléfono.', ok: 'Borrar todo', peligro: true, escribir: 'BORRAR' });
+    if (!ok) return;
+    await DB.reemplazar([], [], {}); for (const k of Object.keys(S.aj)) await DB.borrar('ajustes', k);
+    S.aj = {}; S.desbloqueado = false; S.acreedores = []; S.movs = []; CV++; render(); toast('Datos borrados');
+  }
+};
+function previaLiq(form) {
+  const el = form.querySelector('#prevLiq'); const f = fichaActual();
+  const L = Motor.liquidacion(f.a, S.movs, new FormData(form).get('fecha'), hoy());
+  if (L.error) { el.innerHTML = `<span class="err">${esc(L.error)}</span>`; return; }
+  el.innerHTML = `<table class="liq-tabla"><tr><td>Capital pendiente</td><td>${fmt(L.capital)}</td></tr>
+  ${L.detalle.map(p => `<tr><td>Interés Mes ${p.n} (vence ${fmtFc(p.vence)})${p.vence > hoy() ? ' · mes en curso' : ''}${p.pagado ? ' · saldo' : ''}</td><td>${fmt(p.saldo)}</td></tr>`).join('')}
+  <tr><td>Intereses pendientes</td><td>${fmt(L.interes)}</td></tr><tr class="total"><td>Total para liquidar</td><td>${fmt(L.total)}</td></tr></table>
+  <div class="chico muted">Al confirmar, ${esc(f.a.nombre)} quedará como <b>LIQUIDADO</b>. Todo el historial se conserva. Tus préstamos en Cartera no se modifican.</div>`;
+}
+
+/* ---------- formularios ---------- */
+const FORM = {
+  async crearClave(f, fd) {
+    const p1 = fd.get('p1'), p2 = fd.get('p2');
+    if (p1.length < 4) throw new Error('La contraseña debe tener al menos 4 caracteres.');
+    if (p1 !== p2) throw new Error('Las contraseñas no coinciden.');
+    await crearClave(p1); await desbloquear();
+    if (await huellaDisponible()) {
+      abrirHoja(`<h3>¿Activar la huella digital?</h3><p>Podrás entrar con tu huella. La contraseña seguirá funcionando siempre.</p><div class="fila-btn"><button class="btn sec" data-a="cerrarHoja">Ahora no</button><button class="btn" id="hSi">${ic(I.fp, 18)} Activar</button></div>`);
+      $('#hSi').onclick = async () => { cerrarHoja(); await activarHuella(); };
+    }
+  },
+  async entrar(f, fd) {
+    if (Date.now() < S.bloqueoHasta) throw new Error(`Demasiados intentos. Espera ${Math.ceil((S.bloqueoHasta - Date.now()) / 1000)} segundos.`);
+    if (await verificarClave(fd.get('p'))) { await desbloquear(); return; }
+    S.intentos++; if (S.intentos >= 5) { S.bloqueoHasta = Date.now() + 30000; S.intentos = 0; }
+    f.querySelector('input').value = ''; throw new Error('Contraseña incorrecta');
+  },
+  async acreedor(f, fd) {
+    const ed = S.vista === 'editar';
+    const nombre = String(fd.get('nombre')).trim(); const capital = leerMonto(fd.get('capital')); const tasa = Number(String(fd.get('tasa')).replace(',', '.'));
+    const fecha = fd.get('fecha'); const dia = Number(fd.get('dia')); const obs = String(fd.get('obs') || '').trim();
+    if (!nombre) throw new Error('Escribe el nombre.');
+    if (!(capital > 0)) throw new Error('Escribe un capital válido.');
+    if (!tasaValida(tasa)) throw new Error('La tasa debe estar entre 2% y 10%.');
+    if (!fecha || fecha > hoy()) throw new Error('La fecha no puede ser futura.');
+    if (!(dia >= 1 && dia <= 31 && Number.isInteger(dia))) throw new Error('El día de pago debe ser un número entre 1 y 31.');
+    if (ed) {
+      const a = { ...S.acreedores.find(x => x.id === S.fichaId) }; const cambios = [...(a.cambios || [])];
+      const reg = (campo, antes, despues) => { if (String(antes) !== String(despues)) cambios.push({ fecha: hoy(), ts: Date.now(), campo, antes, despues }); };
+      reg('Nombre', a.nombre, nombre); reg('Capital original', fmt(a.capital), fmt(capital)); reg('Tasa inicial', fmtTasa(a.tasa), fmtTasa(tasa));
+      reg('Fecha de recepción', a.fechaRecepcion, fecha); reg('Día de pago', a.diaPago, dia); reg('Observaciones', a.obs || '—', obs || '—');
+      const fuertes = a.capital !== capital || a.tasa !== tasa || a.fechaRecepcion !== fecha || a.diaPago !== dia;
+      if (fuertes && !(await confirmar({ titulo: 'Recalcular historial', texto: 'Estos cambios recalculan las mensualidades de este acreedor. Los pagos registrados se mantienen. ¿Continuar?', ok: 'Sí, guardar' }))) return;
+      Object.assign(a, { nombre, capital, tasa, fechaRecepcion: fecha, diaPago: dia, obs, cambios });
+      await guardarAcr(a); history.back(); toast('Datos actualizados');
+    } else {
+      if (S.acreedores.some(x => x.nombre.toLowerCase() === nombre.toLowerCase()) && !(await confirmar({ titulo: 'Nombre repetido', texto: `Ya existe un acreedor llamado “${esc(nombre)}”. ¿Crear otro de todas formas?`, ok: 'Crear' }))) return;
+      const a = { id: uid(), nombre, capital, tasa, fechaRecepcion: fecha, diaPago: dia, obs, notas: {}, cambios: [], creado: Date.now() };
+      await guardarAcr(a);
+      S.vista = 'ficha'; S.fichaId = a.id; history.replaceState({ vista: 'ficha', fichaId: a.id }, ''); render(); window.scrollTo(0, 0);
+      const venc = datos().porId[a.id].r.periodos.filter(p => p.vence <= hoy()).length;
+      if (venc) abrirHoja(`<h3>Acreedor creado</h3><p>Se generaron <b>${plural(venc, 'mensualidad vencida', 'mensualidades vencidas')}</b>, todas como <b>PENDIENTES</b>.</p><p>Ahora reconstruye el historial:<br>1. Si hiciste abonos a capital, regístralos primero con “Registrar pago” y su fecha real.<br>2. Usa “Marcar varios” para marcar los meses que pagaste a tiempo, o “Marcar pagado” en cada mes para poner la fecha y el monto exactos.</p><button class="btn grande" data-a="cerrarHoja">Entendido</button>`);
+      else toast('Acreedor guardado');
+    }
+  },
+  async pago(f) {
+    const R = leerPago(f); if (R.error) throw new Error(R.error);
+    const m = { ...R.pago, id: uid(), creado: Date.now() };
+    await guardarMov(m); S.pre = null;
+    toast('Pago registrado'); S.vista = 'ficha'; S.fichaId = R.a.id; history.replaceState({ vista: 'ficha', fichaId: R.a.id }, ''); render(); window.scrollTo(0, 0);
+  },
+  async marcar(f, fd) {
+    const fi = fichaActual(); const n = Number(f.dataset.n); const p = fi.r.periodos.find(x => x.n === n);
+    const monto = leerMonto(fd.get('monto')); const fecha = fd.get('fecha');
+    if (!(monto > 0)) throw new Error('Escribe un monto válido.');
+    if (monto > p.saldo) throw new Error(`El monto supera lo que falta de este mes (${fmt(p.saldo)}).`);
+    if (!fecha || fecha > hoy()) throw new Error('La fecha no puede ser futura.');
+    if (fecha < fi.a.fechaRecepcion) throw new Error('La fecha es anterior a la recepción del préstamo.');
+    await guardarMov({ id: uid(), tipo: 'pago', acreedorId: fi.a.id, fecha, interes: monto, capital: 0, asignaciones: [{ periodo: n, monto }], obs: String(fd.get('obs') || '').trim(), creado: Date.now() });
+    cerrarHoja(); render(); toast(monto === p.saldo ? `Mes ${n} pagado` : `Pago parcial registrado en el Mes ${n}`);
+  },
+  async nota(f, fd) {
+    const a = { ...fichaActual().a }; a.notas = { ...(a.notas || {}) }; const t = String(fd.get('nota') || '').trim(); const n = f.dataset.n;
+    if (t) a.notas[n] = t; else delete a.notas[n];
+    await guardarAcr(a); cerrarHoja(); render(); toast('Nota guardada');
+  },
+  async anular(f, fd) {
+    const m = { ...S.movs.find(x => x.id === f.dataset.id), anulado: true, anuladoEn: hoy(), motivo: String(fd.get('motivo')).trim() };
+    await guardarMov(m); cerrarHoja(); render(); toast('Movimiento anulado');
+  },
+  async tasa(f, fd) {
+    const t = Number(String(fd.get('tasa')).replace(',', '.')); if (!tasaValida(t)) throw new Error('La tasa debe estar entre 2% y 10%.');
+    const fi = fichaActual();
+    await guardarMov({ id: uid(), tipo: 'tasa', acreedorId: fi.a.id, fecha: fd.get('desde'), tasa: t, obs: String(fd.get('obs') || '').trim(), creado: Date.now() });
+    cerrarHoja(); render(); toast(`Nueva tasa ${fmtTasa(t)} desde ${fmtF(fd.get('desde'))}`);
+  },
+  async liquidar(f, fd) {
+    const fi = fichaActual(); const L = Motor.liquidacion(fi.a, S.movs, fd.get('fecha'), hoy());
+    if (L.error) throw new Error(L.error);
+    const ok = await confirmar({ titulo: 'Confirmar liquidación', texto: `Registrarás un pago final de <b>${fmt(L.total)}</b> a ${esc(fi.a.nombre)} (capital ${fmt(L.capital)} + intereses ${fmt(L.interes)}).`, ok: 'Liquidar' });
+    if (!ok) return;
+    await guardarMov({ ...L.pago, id: uid(), obs: String(fd.get('obs') || '').trim(), creado: Date.now() });
+    render(); window.scrollTo(0, 0);
+    abrirHoja(`<h3>✔ Deuda liquidada</h3><p>${esc(fi.a.nombre)} quedó como <b>CANCELADO</b>. Todo el historial se conservó.</p><div class="aviso ok">El capital de <b>${fmt(fi.a.capital)}</b> que antes pertenecía a ${esc(fi.a.nombre)} ya no es una obligación. Pasa a formar parte de tu capital propio, siempre que esos fondos sigan disponibles o invertidos.</div>
+      <div class="fila-btn"><button class="btn sec" data-a="cerrarHoja">Cerrar</button><button class="btn" id="sumarPropio">Sumar ${fmt(fi.a.capital)} a mi capital propio</button></div>`);
+    $('#sumarPropio').onclick = async () => { await setAj('capitalPropio', (S.aj.capitalPropio || 0) + fi.a.capital); cerrarHoja(); render(); toast('Capital propio actualizado'); };
+  },
+  async capitalPropio(f, fd) { const m = leerMonto(fd.get('monto')); if (isNaN(m)) throw new Error('Monto no válido.'); await setAj('capitalPropio', m); CV++; cerrarHoja(); render(); toast('Capital propio guardado'); },
+  async cambiarClave(f, fd) {
+    if (!(await verificarClave(fd.get('a')))) throw new Error('La contraseña actual no es correcta.');
+    if (fd.get('p1').length < 4) throw new Error('Mínimo 4 caracteres.'); if (fd.get('p1') !== fd.get('p2')) throw new Error('Las contraseñas nuevas no coinciden.');
+    await crearClave(fd.get('p1')); cerrarHoja(); toast('Contraseña cambiada');
+  }
+};
+
+/* ---------- respaldo ---------- */
+function datosRespaldo() { return { app: 'control-acreedores', version: 1, exportado: new Date().toISOString(), nota: 'Montos en centavos', acreedores: S.acreedores, movimientos: S.movs, ajustes: { capitalPropio: S.aj.capitalPropio ?? null, autoLock: S.aj.autoLock ?? 3 } }; }
+const nombreRespaldo = () => `control-respaldo-${hoy()}.json`;
+async function descargarRespaldo() {
+  const blob = new Blob([JSON.stringify(datosRespaldo(), null, 1)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = nombreRespaldo();
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 3000);
+  await setAj('ultimoRespaldo', new Date().toISOString()); render(); toast('Respaldo descargado. Guárdalo fuera del teléfono.');
+}
+async function compartirRespaldo() {
+  const file = new File([JSON.stringify(datosRespaldo(), null, 1)], nombreRespaldo(), { type: 'application/json' });
+  if (!navigator.canShare || !navigator.canShare({ files: [file] })) { descargarRespaldo(); return; }
+  try { await navigator.share({ files: [file], title: 'Respaldo Control' }); await setAj('ultimoRespaldo', new Date().toISOString()); render(); } catch { }
+}
+function validarRespaldo(d) {
+  if (!d || d.app !== 'control-acreedores' || !Array.isArray(d.acreedores) || !Array.isArray(d.movimientos)) throw new Error('El archivo no es un respaldo de Control.');
+  d.acreedores.forEach(a => { if (!a.id || !a.nombre || !Number.isInteger(a.capital) || !/^\d{4}-\d\d-\d\d$/.test(a.fechaRecepcion) || !(a.diaPago >= 1 && a.diaPago <= 31) || !(a.tasa > 0)) throw new Error('El respaldo tiene un acreedor con datos dañados.'); });
+  const ids = new Set(d.acreedores.map(a => a.id));
+  d.movimientos.forEach(m => { if (!m.id || !ids.has(m.acreedorId) || !/^\d{4}-\d\d-\d\d$/.test(m.fecha)) throw new Error('El respaldo tiene movimientos dañados.'); });
+}
+document.addEventListener('change', async e => {
+  if (e.target.id !== 'archivoRespaldo' || !e.target.files[0]) return;
+  try {
+    const d = JSON.parse(await e.target.files[0].text()); validarRespaldo(d);
+    const ok = await confirmar({ titulo: 'Restaurar respaldo', texto: `El respaldo del <b>${esc((d.exportado || '').slice(0, 10))}</b> tiene ${plural(d.acreedores.length, 'acreedor', 'acreedores')} y ${plural(d.movimientos.length, 'movimiento', 'movimientos')}. <b>Reemplazará</b> los datos actuales (se guarda una copia interna de los actuales por seguridad). Tu contraseña no cambia.`, ok: 'Restaurar', peligro: true });
+    if (!ok) return;
+    await DB.put('respaldos', { id: new Date().toISOString(), datos: datosRespaldo() });
+    const extra = {}; if (d.ajustes) { if (d.ajustes.capitalPropio != null) extra.capitalPropio = d.ajustes.capitalPropio; if (d.ajustes.autoLock) extra.autoLock = d.ajustes.autoLock; }
+    await DB.reemplazar(d.acreedores, d.movimientos, extra); Object.assign(S.aj, extra);
+    await cargarDatos(); ir('inicio'); toast('Respaldo restaurado');
+  } catch (err) { toast(err.message || 'No se pudo leer el archivo.'); }
+});
+
+/* ---------- eventos globales ---------- */
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const fn = ACC[el.dataset.a]; if (!fn) return;
+  if (el.tagName !== 'INPUT') e.preventDefault();
+  try { await fn(el.dataset, el); } catch (err) { console.error(err); toast(err.message || 'Ocurrió un error'); }
+});
+document.addEventListener('submit', async e => {
+  const f = e.target; const fn = FORM[f.dataset.form]; if (!fn) return;
+  e.preventDefault(); const b = f.querySelector('button:not([type=button])'); if (b) b.disabled = true;
+  try { await fn(f, new FormData(f)); } catch (err) { toast(err.message || 'Ocurrió un error'); } finally { if (b && b.isConnected) b.disabled = false; }
+});
+document.addEventListener('input', e => {
+  const t = e.target; const f = t.closest('form');
+  if (t.dataset.filtro) return;
+  if (f && f.dataset.form === 'pago') { if (t.name === 'acr') { S.pre = { acrId: t.value }; render(); return; } previaPago(f); }
+  if (f && f.dataset.form === 'acreedor') {
+    if (t.name === 'tasaR') f.tasa.value = t.value;
+    if (t.name === 'tasa' && tasaValida(Number(t.value))) f.tasaR.value = t.value;
+    if (t.name === 'dia') t.dataset.tocado = '1';
+    if (t.name === 'fecha' && f.dia.dataset.tocado !== '1' && t.value) f.dia.value = Number(t.value.slice(8));
+    previaAcreedor(f);
+  }
+  if (f && f.dataset.form === 'liquidar' && t.name === 'fecha') previaLiq(f);
+});
+document.addEventListener('change', async e => {
+  const t = e.target; if (!t.dataset.filtro) return;
+  if (t.dataset.filtro === 'autoLock') { await setAj('autoLock', Number(t.value)); toast('Guardado'); return; }
+  S[t.dataset.filtro] = t.value; render();
+});
+
+/* ---------- inicio ---------- */
+(async function iniciar() {
+  try {
+    if (!window.indexedDB) throw new Error('Este navegador no permite guardar datos.');
+    await DB.abrir();
+    (await DB.all('ajustes')).forEach(x => { S.aj[x.clave] = x.valor; });
+    S.listo = true; history.replaceState({ vista: 'inicio' }, ''); render();
+  } catch (e) { $('#app').innerHTML = `<div class="aviso err" style="margin-top:40px"><b>No se pudo abrir el almacenamiento</b>${esc(e.message || e)}. Abre la app en Chrome (no en modo incógnito).</div>`; }
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => { });
+})();
+</script>
+</body>
+</html>
