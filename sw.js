@@ -1,6 +1,6 @@
 /* Service worker de Control: permite abrir la app sin internet.
    Solo actúa dentro de su propia carpeta, así no interfiere con Cartera. */
-const CACHE = 'control-acreedores-v1.0.0';
+const CACHE = 'control-acreedores-v1.0.1';
 const BASE = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
@@ -29,7 +29,9 @@ self.addEventListener('fetch', e => {
     }));
     return;
   }
+  // Archivos propios: primero internet (así llegan las actualizaciones), si no hay, la copia guardada.
   if (url.origin === location.origin) {
-    e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(r => { if (r.ok) { const c = r.clone(); caches.open(CACHE).then(x => x.put(req, c)); } return r; })));
+    e.respondWith(fetch(req).then(r => { if (r.ok) { const c = r.clone(); caches.open(CACHE).then(x => x.put(req, c)); } return r; })
+      .catch(() => caches.match(req)));
   }
 });
